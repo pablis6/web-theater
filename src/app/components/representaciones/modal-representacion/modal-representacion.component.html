@@ -1,0 +1,125 @@
+<div
+  class="fixed inset-0 z-10 flex items-center justify-center bg-black bg-opacity-60 text-lg"
+  *ngIf="showModal"
+>
+  <div
+    class="bg-white w-11/12 md:w-1/2 lg:w-1/3 xl:w-1/4 rounded-lg shadow-xl p-4"
+  >
+    <h1 class="text-3xl font-bold text-center">
+      <span *ngIf="!representacion">Nueva </span
+      ><span *ngIf="representacion">Editar </span>representación
+    </h1>
+
+    <form class="flex flex-col" [formGroup]="representacionForm">
+      <label class="mt-2" for="obra">Nombre de la función</label>
+      <div class="grid grid-cols-1">
+        <div class="col-span-1">
+          <theater-select [selected]="obraSeleccionada?.name">
+            <div
+              *ngFor="let obra of obras"
+              class="cursor-pointer p-2 flex justify-between"
+              (click)="setObra(obra)"
+            >
+              <span>{{ obra?.name }}</span>
+              <theater-icon
+                *ngIf="obraSeleccionada?.id === obra?.id"
+                class="self-center"
+                [type]="Types.check"
+                [width]="30"
+              ></theater-icon>
+            </div>
+          </theater-select>
+        </div>
+      </div>
+
+      <label class="mt-2" for="fecha">Fecha</label>
+      <input
+        type="date"
+        id="fecha"
+        class="border border-gray-400 rounded-lg p-2"
+        formControlName="fecha"
+      />
+
+      <label for="session" class="mt-2">Sesión</label>
+      <div class="grid grid-cols-1">
+        <div class="col-span-1">
+          <theater-select [selected]="sesionSeleccionada?.label">
+            <div
+              *ngFor="let sesion of sesiones"
+              class="cursor-pointer p-2 flex justify-between"
+              (click)="setSesion(sesion)"
+            >
+              <span>{{ sesion?.label }}</span>
+              <theater-icon
+                *ngIf="sesionSeleccionada?.value === sesion?.value"
+                class="self-center"
+                [type]="Types.check"
+                [width]="30"
+              ></theater-icon>
+            </div>
+          </theater-select>
+        </div>
+      </div>
+
+      <label for="grupo" class="mt-2">Grupo</label>
+      <div class="grid grid-cols-1">
+        <div class="col-span-1">
+          <theater-select [selected]="grupoSeleccionado?.name">
+            <div
+              *ngFor="let grupo of grupos"
+              class="cursor-pointer p-2 flex justify-between"
+              (click)="setGrupo(grupo)"
+            >
+              <span>{{ grupo?.name }}</span>
+              <theater-icon
+                *ngIf="grupoSeleccionado?.id === grupo?.id"
+                class="self-center"
+                [type]="Types.check"
+                [width]="30"
+              ></theater-icon>
+            </div>
+          </theater-select>
+        </div>
+      </div>
+
+      <div class="flex justify-between">
+        <button
+          class="bg-red-500 text-white rounded-lg px-4 py-1 mt-4"
+          (click)="cancel.emit()"
+        >
+          Cancelar
+        </button>
+
+        <button
+          [disabled]="representacionForm.invalid"
+          class="bg-green-500 text-white rounded-lg px-4 py-1 mt-4 disabled:opacity-50"
+          (click)="onSave()"
+        >
+          Guardar
+        </button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<!-- <div class="bg-black text-white absolute p-4 bottom-0 right-0 z-50">
+  <div class="flex flex-col">
+    <span>representacionForm: {{ representacionForm.status }}</span>
+    <span>representacionForm: {{ representacionForm.getError("obra") }}</span>
+
+    <span
+      >obra:
+      {{ (representacionForm.get("obra")?.value | json) || undefined }}</span
+    >
+    <span
+      >sesion: {{ representacionForm.get("sesion")?.value || "Mañana" }}</span
+    >
+    <span
+      >grupo:
+      {{ (representacionForm.get("grupo")?.value | json) || undefined }}</span
+    >
+    <span
+      >fecha: {{ representacionForm.get("fecha")?.value || "2024-07-24" }}</span
+    >
+  </div>
+</div> -->

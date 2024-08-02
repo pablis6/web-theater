@@ -1,0 +1,115 @@
+<section class="container mx-auto grid grid-cols-1 md:grid-cols-12">
+  <div class="mt-8 flex justify-end col-span-12">
+    <button
+      type="button"
+      class="bg-accent px-4 flex gap-2 rounded-lg"
+      (click)="openModal()"
+    >
+      <theater-icon
+        class="text-black self-center"
+        [width]="30"
+        [type]="Types.add"
+      />
+      <span class="my-2">Añadir representacion</span>
+    </button>
+  </div>
+  <div class="mt-5 col-span-1 md:col-span-12 grid grid-cols-1 rounded-lg">
+    <table class="col-span-1 md:col-span-12">
+      <thead>
+        <tr
+          class="grid grid-cols-1 md:grid-cols-12 bg-slate-500 rounded-t-lg [&>th]:text-left [&>th]:p-4"
+        >
+          <th
+            scope="col"
+            class="border-r-4 border-r-primary dark:border-r-dark-primary col-span-3"
+          >
+            Fecha - Turno
+          </th>
+          <th
+            scope="col"
+            class="border-r-4 border-r-primary dark:border-r-dark-primary col-span-5"
+          >
+            Nombre de la función
+          </th>
+          <th
+            scope="col"
+            class="border-r-4 border-r-primary dark:border-r-dark-primary col-span-2"
+          >
+            Grupo
+          </th>
+          <th scope="col" class="col-span-2">Acciones</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr
+          class="grid grid-cols-1 md:grid-cols-12 text-secondary dark:text-dark-secondary border-t-4 border-t-primary dark:border-t-dark-primary last:rounded-b-lg [&>td]:content-center [&>td]:px-4"
+          *ngFor="
+            let repre of representaciones;
+            let i = index;
+            let odd = odd;
+            trackBy: trackByFn
+          "
+          [ngClass]="
+            odd
+              ? 'bg-slate-400 dark:bg-slate-700'
+              : 'bg-slate-300 dark:bg-slate-600'
+          "
+        >
+          <td
+            class="border-r-4 border-r-primary dark:border-r-dark-primary col-span-12 md:col-span-3"
+          >
+            <span
+              >{{ repre.fecha | date : "dd MMMM yyy" }} -
+              {{ repre.sesion }}</span
+            >
+          </td>
+          <td
+            class="border-r-4 border-r-primary dark:border-r-dark-primary col-span-12 md:col-span-5"
+          >
+            <span>{{ repre.obra?.name }}</span>
+          </td>
+          <td
+            class="border-r-4 border-r-primary dark:border-r-dark-primary col-span-12 md:col-span-2"
+          >
+            <span>{{ repre.grupo?.name }}</span>
+          </td>
+          <td class="col-span-12 md:col-span-2 md:grid grid-cols-4">
+            <button
+              class="md:col-span-1 m-auto bg-accent text-secondary rounded-full overflow-hidden"
+              (click)="verPlano(repre)"
+            >
+              <theater-icon [type]="Types.theater" class="h-7" [width]="50" />
+            </button>
+            <button
+              class="md:col-span-1 m-auto bg-accent text-secondary rounded-full"
+              (click)="descargar(repre)"
+            >
+              <theater-icon [type]="Types.download" class="h-7" [width]="50" />
+            </button>
+            <button
+              class="md:col-span-1 m-auto bg-accent text-secondary rounded-full"
+              (click)="openModal(repre)"
+            >
+              <theater-icon [type]="Types.edit" class="h-7" [width]="50" />
+            </button>
+            <button
+              class="md:col-span-1 m-auto bg-accent text-secondary rounded-full my-2"
+              (click)="eliminar(repre)"
+            >
+              <theater-icon [type]="Types.delete" class="h-7" [width]="50" />
+            </button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<theater-modal-representacion
+  [showModal]="showModal"
+  (cancel)="cancel()"
+  (save)="save($event)"
+  [representacion]="representacionSeleccionada"
+  [obras]="obras"
+  [grupos]="grupos"
+></theater-modal-representacion>

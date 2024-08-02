@@ -1,0 +1,22 @@
+<!-- selector -->
+<div class="relative">
+  <div
+    class="flex justify-between border border-gray-400 rounded-lg p-2 h-12 cursor-pointer relative"
+    (click)="toggleOpen()"
+  >
+    <span>{{ selected }}</span>
+
+    <theater-icon
+      [type]="Types.arrow"
+      [width]="20"
+      class="self-center"
+    ></theater-icon>
+  </div>
+  <div
+    class="bg-white rounded-lg absolute min-w-px shadow-lg w-full z-10"
+    *ngIf="isOpen"
+    (click)="toggleOpen()"
+  >
+    <ng-content></ng-content>
+  </div>
+</div>

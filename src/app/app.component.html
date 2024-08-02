@@ -1,6 +1,36 @@
-<header class="">
-  <h1>Gestión entradas Teatro Menesiano</h1>
-  <img src="assets/img/LOGO-TEATRO-MENE.jpg" alt="Logo" />
+<header class="bg-accent rounded-lg m-3 shadow-lg">
+  <div class="flex justify-between h-20 p-2">
+    <img
+      src="./app/assets/img/LOGO-TEATRO-MENE.svg"
+      alt="Logo"
+      class="rounded-lg"
+    />
+    <h1 class="text-sm md:text-3xl transition-all font-bold m-auto">
+      Gestión entradas Teatro Menesiano
+    </h1>
+    <div
+      (click)="toggleTheme()"
+      class="flex mr-8 self-center pointer-events-auto h-8 w-16 rounded-full p-1 ring-1 ring-inset transition duration-200 ease-in-out bg-dark-primary ring-black/20 cursor-pointer"
+      [ngClass]="{ 'dark:bg-blue-300 ring-slate-900/5': isDark }"
+    >
+      <theater-icon
+        *ngIf="isDark"
+        [type]="Types.sun"
+        class="text-orange-400 transition duration-200 ease-in-out translate-x-1 translate-y-1"
+        [width]="16"
+      />
+      <div
+        class="h-6 w-6 rounded-full bg-primary shadow-sm ring-1 ring-slate-700/10 transition duration-200 ease-in-out dark:translate-x-4 dark:bg-dark-primary"
+      ></div>
+
+      <theater-icon
+        *ngIf="!isDark"
+        [type]="Types.moon"
+        class="text-yellow-400 transition duration-200 ease-in-out translate-x-3 translate-y-1"
+        [width]="16"
+      />
+    </div>
+  </div>
 </header>
 <router-outlet />
 <footer></footer>

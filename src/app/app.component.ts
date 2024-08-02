@@ -1,14 +1,27 @@
 import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
+import {
+  IconComponent,
+  Types,
+} from './components/icons/theater-icons.component';
 
 @Component({
-  selector: 'app-root',
+  selector: 'theater-root',
   standalone: true,
-  imports: [CommonModule, RouterOutlet],
+  imports: [CommonModule, RouterOutlet, IconComponent],
   templateUrl: './app.component.html',
   styleUrl: './app.component.css',
 })
 export class AppComponent {
-  title = 'web-theater';
+  Types = Types;
+  public isDark = false;
+  constructor() {
+    // this.toggleTheme();
+  }
+
+  toggleTheme(): void {
+    this.isDark = !this.isDark;
+    document.documentElement.classList.toggle('dark');
+  }
 }

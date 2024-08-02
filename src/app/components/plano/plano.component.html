@@ -1,1 +1,103 @@
-<p>plano works!</p>
+<section class="w-fit mx-auto mb-20">
+  <div *ngFor="let fila of plano?.butacas" class="flex">
+    <div
+      *ngFor="let butaca of fila"
+      (click)="selectButaca(butaca)"
+      (contextmenu)="onRightClick($event)"
+      (right-click)="$event.preventDefault()"
+      class="flex justify-center items-center w-6 h-6 bg-gray-300 rounded-lg m-1 has-tooltip cursor-pointer hover:bg-gray-400 hover:shadow-lg hover:scale-110 transition-transform"
+      [ngClass]="
+        butaca.estado !== 'Vacia'
+          ? 'cursor-pointer hover:bg-gray-400 hover:shadow-lg hover:scale-110 transition-transform'
+          : 'cursor-not-allowed'
+      "
+    >
+      <!-- <div *ngIf="showContextMenu">
+        <span>opcion 1</span>
+        <span>opcion 1</span>
+      </div> -->
+      @if (butaca.estado === 'Pasillo') {
+      <span>{{ butaca.fila }}</span>
+      } @else if (butaca.estado === 'Vacia') { } @else {
+      <span
+        class="tooltip rounded-lg shadow-lg p-1 bg-slate-100 dark:bg-slate-800 text-slate-800 dark:text-slate-100 -mt-28 text-base font-medium w-max"
+      >
+        @if (butaca.estado === 'Ocupada') {
+        <p>{{ butaca.asignadoA }}</p>
+        } @else {
+        <p>{{ butaca.estado }}</p>
+        }
+        <p>Fila {{ butaca.fila }}</p>
+        <p>Butaca {{ butaca.num_butaca }}</p>
+      </span>
+      <div
+        [ngClass]="{
+          'text-green-500': butaca.estado === 'Libre',
+          'text-red-500': butaca.estado === 'Ocupada',
+          'text-yellow-500': butaca.estado === 'Reservada',
+          'text-blue-500': butaca.estado === 'Seleccionada',
+          'text-red-300': butaca.estado === 'Rota'
+        }"
+      >
+        <theater-icon [type]="Types.seat" [width]="23"></theater-icon>
+      </div>
+      }
+    </div>
+  </div>
+</section>
+<!-- seccion con el escenario -->
+<footer
+  class="bg-gray-300 rounded-lg m-3 shadow-lg fixed bottom-0 w-auto left-0 right-0"
+>
+  <div class="grid grid-cols-3 h-20 p-2">
+    <div></div>
+    <h1 class="text-sm md:text-3xl transition-all font-bold m-auto">
+      ESCENARIO
+    </h1>
+    <div class="self-center flex justify-end">
+      <form [formGroup]="planoForm">
+        <input
+          type="text"
+          class="bg-gray-300 border-b-2 border-gray-400 text-center"
+          placeholder="Nombre"
+          formControlName="nombre"
+        />
+        <button
+          class="bg-accent text-white px-4 py-2 rounded-lg mx-6 disabled:opacity-50 disabled:cursor-not-allowed"
+          [disabled]="!getEnabled()"
+          (click)="guardarButacas()"
+        >
+          Guardar
+        </button>
+      </form>
+    </div>
+  </div>
+</footer>
+<!-- <section class="w-full h-20 bg-gray-300 fixed bottom-0 flex justify-between">
+  <div class="opacity-1">
+    <input
+      type="text"
+      class="bg-gray-300 border-b-2 border-gray-400 text-center"
+      placeholder="Nombre"
+    />
+    <button class="bg-accent text-white px-4 py-2 rounded-lg mx-4">
+      Guardar
+    </button>
+  </div>
+  <div class="">
+    <span class="text-7xl">ESCENARIO</span>
+  </div>
+  <div class="self-center flex justify-around">
+    <input
+      type="text"
+      class="bg-gray-300 border-b-2 border-gray-400 text-center"
+      placeholder="Nombre"
+    />
+    <button
+      class="bg-accent text-white px-4 py-2 rounded-lg mx-6"
+      (click)="guardarButacas()"
+    >
+      Guardar
+    </button>
+  </div>
+</section> -->
