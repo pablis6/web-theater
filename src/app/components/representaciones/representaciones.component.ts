@@ -1,10 +1,12 @@
-import { CommonModule } from '@angular/common';
+import { CommonModule, DatePipe } from '@angular/common';
 import { Component, TrackByFunction } from '@angular/core';
 import { Router } from '@angular/router';
 import { GruposService } from '@api/services/grupos.service';
 import { ObrasService } from '@api/services/obras.service';
 import { PlanosService } from '@api/services/planos.service';
 import { RepresentacionesService } from '@api/services/representaciones.service';
+import { WordService } from '@api/services/word.service';
+import { Butaca } from '@api/types/butacas';
 import { Grupo } from '@api/types/grupo';
 import { Obra } from '@api/types/obra';
 import { Representacion } from '@api/types/representacion';
@@ -12,13 +14,14 @@ import {
   IconComponent,
   Types,
 } from '@components/icons/theater-icons.component';
+import { combineLatest } from 'rxjs';
 import { ModalRepresentacionComponent } from './modal-representacion/modal-representacion.component';
 
 @Component({
   selector: 'theater-representaciones',
   standalone: true,
   imports: [CommonModule, IconComponent, ModalRepresentacionComponent],
-  providers: [RepresentacionesService],
+  providers: [RepresentacionesService, DatePipe],
   templateUrl: './representaciones.component.html',
 })
 export class RepresentacionesComponent {
@@ -36,7 +39,8 @@ export class RepresentacionesComponent {
     private readonly representacionesService: RepresentacionesService,
     private readonly planosService: PlanosService,
     private readonly obrasService: ObrasService,
-    private readonly gruposService: GruposService
+    private readonly gruposService: GruposService,
+    private wordService: WordService
   ) {}
 
   ngOnInit() {
@@ -58,7 +62,99 @@ export class RepresentacionesComponent {
     this.showModal = true;
   }
 
-  descargar(repre: Representacion) {}
+  descargar(repre: Representacion) {
+    let modo = 2;
+    console.time('descargar');
+    //Modo 1
+    if (modo === 1) {
+      let personas: { asignadoA: string; butacas: Butaca[] }[] = [];
+      this.planosService
+        .getPlanoByRepresentacionId(repre.id)
+        .subscribe((repre) => {
+          // Recorrer todas las butacas para obtener las ocupadas y sus nombres
+          repre.butacas.forEach((fila) => {
+            fila.forEach((butaca) => {
+              if (butaca.estado === 'Ocupada') {
+                const index = personas.findIndex(
+                  (persona) => persona.asignadoA === butaca?.asignadoA
+                );
+                if (index !== -1) {
+                  personas[index].butacas.push(butaca);
+                } else {
+                  personas.push({
+                    asignadoA: butaca.asignadoA || '',
+                    butacas: [butaca],
+                  });
+                }
+              }
+            });
+          });
+
+          // Ordenar por nombre
+          personas.sort((a, b) => {
+            if (a.asignadoA < b.asignadoA) {
+              return -1;
+            }
+            if (a.asignadoA > b.asignadoA) {
+              return 1;
+            }
+            return 0;
+          });
+
+          console.log(personas);
+          // Mostrar por consola
+          personas.forEach((persona) => {
+            console.log(persona.asignadoA, '(' + persona.butacas.length + ')');
+            persona.butacas.forEach((butaca) => {
+              console.log('Fila:', butaca.fila, ' Butaca:', butaca.num_butaca);
+            });
+          });
+          console.timeEnd('descargar');
+        });
+    }
+    //Modo 2
+    else {
+      combineLatest([
+        this.planosService.getNameSeats(repre.id),
+        this.planosService.getOccupiedSeats(repre.id),
+      ]).subscribe(([nombres, ocupadas]) => {
+        let personas: {
+          asignadoA: string;
+          butacas: number[];
+          fila: number;
+        }[] = [];
+        nombres.forEach((nombre) => {
+          const ocupadasPersona = ocupadas.filter(
+            (ocupada: { butaca: Butaca }) => ocupada.butaca.asignadoA === nombre
+          );
+          const agrupadasPorFila = ocupadasPersona.reduce((acc, { butaca }) => {
+            const { fila, num_butaca } = butaca;
+            if (!acc[fila]) {
+              acc[fila] = [];
+            }
+            acc[fila].push(num_butaca);
+            return acc;
+          }, {} as { [key: number]: number[] });
+
+          const butacasAgrupadas = Object.keys(agrupadasPorFila).map(
+            (fila) => ({
+              fila: Number(fila),
+              butacas: agrupadasPorFila[Number(fila)],
+            })
+          );
+          butacasAgrupadas.forEach((butacasPorFila) => {
+            personas.push({
+              asignadoA: nombre,
+              ...butacasPorFila,
+            });
+          });
+        });
+        console.log(personas);
+        console.timeEnd('descargar');
+        this.wordService.generateDocument(repre, personas);
+      });
+    }
+  }
 
   /**
    * Edita una representacion

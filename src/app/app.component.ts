@@ -1,6 +1,7 @@
-import { CommonModule } from '@angular/common';
+import { CommonModule, DatePipe, UpperCasePipe } from '@angular/common';
 import { Component } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
+import { WordService } from '@api/services/word.service';
 import {
   IconComponent,
   Types,
@@ -10,6 +11,7 @@ import {
   selector: 'theater-root',
   standalone: true,
   imports: [CommonModule, RouterOutlet, IconComponent],
+  providers: [DatePipe, UpperCasePipe, WordService],
   templateUrl: './app.component.html',
   styleUrl: './app.component.css',
 })

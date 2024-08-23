@@ -24,6 +24,14 @@ export class PlanosService {
     return this.http.get<Plano>(`${this.apiUrl}/${id}`);
   }
 
+  getOccupiedSeats(id: string): Observable<[]> {
+    return this.http.get<[]>(`${this.apiUrl}/${id}/butacasOcupadas`);
+  }
+
+  getNameSeats(id: string): Observable<[]> {
+    return this.http.get<[]>(`${this.apiUrl}/${id}/nombresButacas`);
+  }
+
   updateSeat(id: string, butacas: Butaca[][]): Observable<Plano> {
     return this.http.patch<Plano>(`${this.apiUrl}/${id}`, butacas);
   }

@@ -1,42 +1,117 @@
-<section class="w-fit mx-auto mb-20">
-  <div *ngFor="let fila of plano?.butacas" class="flex">
+<div class="hidden xl:block absolute m-3">
+  <div class="text-lg">
+    <a class="text-accent underline" href="representaciones">Inicio</a>
+    <span> > {{ representacion?.fecha }} - {{ representacion?.sesion }}</span>
+  </div>
+  <div id="miniatura" class="rounded-lg bg-gray-300 mt-3 w-44 h-32"></div>
+  <div
+    id="miniatura-overlay"
+    (click)="changeMini()"
+    class="rounded-lg mt-3 w-44 h-32 absolute top-7 z-50 cursor-pointer"
+  ></div>
+</div>
+<section
+  #planoEntresuelo
+  class="w-fit mx-auto mb-24 relative xl:absolute xl:origin-top-left xl:transition-[top,left,transform] xl:duration-1000"
+  [ngClass]="
+    !miniaturaPatio
+      ? 'xl:scale-[0.18] xl:top-[162px] xl:left-6'
+      : 'xl:left-1/2 xl:-translate-x-1/2 xl:top-28'
+  "
+>
+  <ng-container
+    *ngTemplateOutlet="
+      planoButacas;
+      context: { butacas: plano?.butacas?.slice(0, 1) } as PlanoButacasContext
+    "
+  ></ng-container>
+</section>
+<section
+  #planoPatio
+  class="w-fit mx-auto mb-24 relative xl:absolute xl:origin-top-left xl:transition-[top,left,transform] xl:duration-1000"
+  [ngClass]="
+    miniaturaPatio
+      ? 'xl:scale-[0.18] xl:top-[162px] xl:left-6'
+      : 'xl:left-1/2 xl:-translate-x-1/2 xl:top-28'
+  "
+>
+  <ng-container
+    *ngTemplateOutlet="
+      planoButacas;
+      context: { butacas: plano?.butacas?.slice(1) } as PlanoButacasContext
+    "
+  ></ng-container>
+</section>
+
+<ng-template #planoButacas let-butacas="butacas">
+  <div *ngFor="let fila of butacas" class="flex min-h-6">
     <div
       *ngFor="let butaca of fila"
       (click)="selectButaca(butaca)"
-      (contextmenu)="onRightClick($event)"
+      (contextmenu)="onRightClick($event, butaca)"
       (right-click)="$event.preventDefault()"
-      class="flex justify-center items-center w-6 h-6 bg-gray-300 rounded-lg m-1 has-tooltip cursor-pointer hover:bg-gray-400 hover:shadow-lg hover:scale-110 transition-transform"
+      class="flex justify-center items-center w-6 h-6 bg-gray-300 rounded-lg m-0.5 has-tooltip has-context-menu cursor-pointer hover:bg-gray-400 hover:shadow-lg hover:scale-110 transition-transform"
       [ngClass]="
         butaca.estado !== 'Vacia'
           ? 'cursor-pointer hover:bg-gray-400 hover:shadow-lg hover:scale-110 transition-transform'
           : 'cursor-not-allowed'
       "
     >
-      <!-- <div *ngIf="showContextMenu">
-        <span>opcion 1</span>
-        <span>opcion 1</span>
-      </div> -->
-      @if (butaca.estado === 'Pasillo') {
-      <span>{{ butaca.fila }}</span>
-      } @else if (butaca.estado === 'Vacia') { } @else {
+      <ul
+        class="context-menu rounded-lg shadow-lg p-1 bg-slate-100 dark:bg-slate-800 text-slate-800 dark:text-slate-100 top-4 left-4 text-base font-medium w-max"
+        *ngIf="showContextMenu"
+        (mouseleave)="showContextMenu = false"
+      >
+        <li
+          *ngIf="butaca?.estado === 'Ocupada' || butaca?.estado === 'Reservada'"
+          class="p-1 rounded-lg hover:bg-slate-300"
+          (click)="cambioEstado($event, butaca, 'Libre')"
+        >
+          Liberar
+        </li>
+        <li
+          *ngIf="butaca?.estado === 'Libre'"
+          class="p-1 rounded-lg hover:bg-slate-300"
+          (click)="cambioEstado($event, butaca, 'Reservada')"
+        >
+          Reservar
+        </li>
+        <li
+          *ngIf="butaca?.estado === 'Libre'"
+          class="p-1 rounded-lg hover:bg-slate-300"
+          (click)="cambioEstado($event, butaca, 'Rota')"
+        >
+          Marcar rota
+        </li>
+        <li
+          *ngIf="butaca?.estado === 'Rota'"
+          class="p-1 rounded-lg hover:bg-slate-300"
+          (click)="cambioEstado($event, butaca, 'Libre')"
+        >
+          Marcar arreglada
+        </li>
+      </ul>
+      @if (butaca?.estado === 'Pasillo') {
+      <b class="text-lg">{{ butaca?.fila }}</b>
+      } @else if (butaca?.estado === 'Vacia') { } @else {
       <span
         class="tooltip rounded-lg shadow-lg p-1 bg-slate-100 dark:bg-slate-800 text-slate-800 dark:text-slate-100 -mt-28 text-base font-medium w-max"
       >
-        @if (butaca.estado === 'Ocupada') {
-        <p>{{ butaca.asignadoA }}</p>
+        <p class="uppercase text-center">{{ butaca?.zona }}</p>
+        @if (butaca?.estado === 'Ocupada') {
+        <p>{{ butaca?.asignadoA }}</p>
         } @else {
-        <p>{{ butaca.estado }}</p>
+        <p>{{ butaca?.estado }}</p>
         }
-        <p>Fila {{ butaca.fila }}</p>
-        <p>Butaca {{ butaca.num_butaca }}</p>
+        <p>Fila {{ butaca?.fila }} Butaca {{ butaca?.num_butaca }}</p>
       </span>
       <div
         [ngClass]="{
-          'text-green-500': butaca.estado === 'Libre',
-          'text-red-500': butaca.estado === 'Ocupada',
-          'text-yellow-500': butaca.estado === 'Reservada',
-          'text-blue-500': butaca.estado === 'Seleccionada',
-          'text-red-300': butaca.estado === 'Rota'
+          'text-green-500': butaca?.estado === 'Libre',
+          'text-red-500': butaca?.estado === 'Ocupada',
+          'text-yellow-500': butaca?.estado === 'Reservada',
+          'text-blue-500': butaca?.estado === 'Seleccionada',
+          'text-red-300': butaca?.estado === 'Rota'
         }"
       >
         <theater-icon [type]="Types.seat" [width]="23"></theater-icon>
@@ -44,7 +119,8 @@
       }
     </div>
   </div>
-</section>
+</ng-template>
+
 <!-- seccion con el escenario -->
 <footer
   class="bg-gray-300 rounded-lg m-3 shadow-lg fixed bottom-0 w-auto left-0 right-0"

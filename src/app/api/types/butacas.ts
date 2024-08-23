@@ -1,3 +1,11 @@
+export type Estado =
+  | 'Pasillo'
+  | 'Vacia'
+  | 'Libre'
+  | 'Ocupada'
+  | 'Reservada'
+  | 'Seleccionada'
+  | 'Rota';
 export interface Butaca {
   /**
    * La fila de la butaca
@@ -12,14 +20,7 @@ export interface Butaca {
   /**
    * El estado de la butaca
    */
-  estado:
-    | 'Pasillo'
-    | 'Vacia'
-    | 'Libre'
-    | 'Ocupada'
-    | 'Reservada'
-    | 'Seleccionada'
-    | 'Rota';
+  estado: Estado;
 
   /**
    * El id del usuario al que esta asignado

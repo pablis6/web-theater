@@ -16,8 +16,8 @@ export const routes: Routes = [
       },
     ],
   },
-  {
-    path: '**',
-    redirectTo: 'representaciones',
-  },
+  // {
+  //   path: '**',
+  //   redirectTo: 'representaciones',
+  // },
 ];
