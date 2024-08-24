@@ -2,7 +2,7 @@ export interface Obra {
   /**
    * El id del obra
    */
-  id: string;
+  id?: string;
 
   /**
    * El nombre del obra

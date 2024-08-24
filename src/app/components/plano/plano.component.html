@@ -43,6 +43,23 @@
   ></ng-container>
 </section>
 
+<section #descargas class="w-fit mx-3 absolute origin-top-right right-0">
+  <div class="flex flex-col items-stretch text-lg gap-2">
+    <button
+      class="bg-gray-300 px-4 py-2 rounded-lg hover:bg-gray-400"
+      (click)="descargarPlano()"
+    >
+      Descargar plano
+    </button>
+    <button
+      class="bg-gray-300 px-4 py-2 rounded-lg hover:bg-gray-400"
+      (click)="descargarButacas()"
+    >
+      Descargar butacas
+    </button>
+  </div>
+</section>
+
 <ng-template #planoButacas let-butacas="butacas">
   <div *ngFor="let fila of butacas" class="flex min-h-6">
     <div
@@ -149,31 +166,3 @@
     </div>
   </div>
 </footer>
-<!-- <section class="w-full h-20 bg-gray-300 fixed bottom-0 flex justify-between">
-  <div class="opacity-1">
-    <input
-      type="text"
-      class="bg-gray-300 border-b-2 border-gray-400 text-center"
-      placeholder="Nombre"
-    />
-    <button class="bg-accent text-white px-4 py-2 rounded-lg mx-4">
-      Guardar
-    </button>
-  </div>
-  <div class="">
-    <span class="text-7xl">ESCENARIO</span>
-  </div>
-  <div class="self-center flex justify-around">
-    <input
-      type="text"
-      class="bg-gray-300 border-b-2 border-gray-400 text-center"
-      placeholder="Nombre"
-    />
-    <button
-      class="bg-accent text-white px-4 py-2 rounded-lg mx-6"
-      (click)="guardarButacas()"
-    >
-      Guardar
-    </button>
-  </div>
-</section> -->

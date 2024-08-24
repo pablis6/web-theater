@@ -1,0 +1,43 @@
+<div
+  class="fixed inset-0 z-10 flex items-center justify-center bg-black bg-opacity-60 text-lg"
+  *ngIf="showModal"
+>
+  <div
+    class="bg-white w-11/12 md:w-1/2 lg:w-1/3 xl:w-1/4 rounded-lg shadow-xl p-4"
+  >
+    <h1 class="text-3xl font-bold text-center">
+      <span>Nueva representación</span>
+    </h1>
+
+    <form class="flex flex-col" [formGroup]="obraForm">
+      <label class="mt-2" for="obra">Nombre de la obra</label>
+      <div class="grid grid-cols-1">
+        <div class="col-span-1">
+          <input
+            type="input"
+            id="obra"
+            class="border border-gray-400 rounded-lg p-2 w-full"
+            formControlName="obra"
+          />
+        </div>
+      </div>
+
+      <div class="flex justify-between">
+        <button
+          class="bg-red-500 text-white rounded-lg px-4 py-1 mt-4"
+          (click)="cancel.emit()"
+        >
+          Cancelar
+        </button>
+
+        <button
+          [disabled]="obraForm.invalid"
+          class="bg-green-500 text-white rounded-lg px-4 py-1 mt-4 disabled:opacity-50"
+          (click)="onSave()"
+        >
+          Guardar
+        </button>
+      </div>
+    </form>
+  </div>
+</div>

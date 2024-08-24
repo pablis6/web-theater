@@ -9,6 +9,7 @@ import {
 import { ActivatedRoute } from '@angular/router';
 import { PlanosService } from '@api/services/planos.service';
 import { RepresentacionesService } from '@api/services/representaciones.service';
+import { WordService } from '@api/services/word.service';
 import { Butaca, Estado } from '@api/types/butacas';
 import { Plano } from '@api/types/plano';
 import { Representacion } from '@api/types/representacion';
@@ -40,7 +41,8 @@ export class PlanoComponent implements OnInit {
   constructor(
     private readonly planosService: PlanosService,
     private readonly representacionesService: RepresentacionesService,
-    private readonly activatedRoute: ActivatedRoute
+    private readonly activatedRoute: ActivatedRoute,
+    private wordService: WordService
   ) {}
 
   ngOnInit() {
@@ -112,4 +114,102 @@ export class PlanoComponent implements OnInit {
         this.planoForm.reset();
       });
   }
+
+  descargarButacas() {
+    let modo = 2;
+    console.time('descargar');
+    if (!this.representacion) return;
+    //Modo 1
+    if (modo === 1) {
+      let personas: { asignadoA: string; butacas: Butaca[] }[] = [];
+      this.planosService
+        .getPlanoByRepresentacionId(this.representacion?.id)
+        .subscribe((repre) => {
+          // Recorrer todas las butacas para obtener las ocupadas y sus nombres
+          repre.butacas.forEach((fila) => {
+            fila.forEach((butaca) => {
+              if (butaca.estado === 'Ocupada') {
+                const index = personas.findIndex(
+                  (persona) => persona.asignadoA === butaca?.asignadoA
+                );
+                if (index !== -1) {
+                  personas[index].butacas.push(butaca);
+                } else {
+                  personas.push({
+                    asignadoA: butaca.asignadoA || '',
+                    butacas: [butaca],
+                  });
+                }
+              }
+            });
+          });
+
+          // Ordenar por nombre
+          personas.sort((a, b) => {
+            if (a.asignadoA < b.asignadoA) {
+              return -1;
+            }
+            if (a.asignadoA > b.asignadoA) {
+              return 1;
+            }
+            return 0;
+          });
+
+          console.log(personas);
+          // Mostrar por consola
+          personas.forEach((persona) => {
+            console.log(persona.asignadoA, '(' + persona.butacas.length + ')');
+            persona.butacas.forEach((butaca) => {
+              console.log('Fila:', butaca.fila, ' Butaca:', butaca.num_butaca);
+            });
+          });
+          console.timeEnd('descargar');
+        });
+    }
+    //Modo 2
+    else {
+      combineLatest([
+        this.planosService.getNameSeats(this.representacion.id),
+        this.planosService.getOccupiedSeats(this.representacion.id),
+      ]).subscribe(([nombres, ocupadas]) => {
+        let personas: {
+          asignadoA: string;
+          butacas: number[];
+          fila: number;
+        }[] = [];
+        nombres.forEach((nombre) => {
+          const ocupadasPersona = ocupadas.filter(
+            (ocupada: { butaca: Butaca }) => ocupada.butaca.asignadoA === nombre
+          );
+          const agrupadasPorFila = ocupadasPersona.reduce((acc, { butaca }) => {
+            const { fila, num_butaca } = butaca;
+            if (!acc[fila]) {
+              acc[fila] = [];
+            }
+            acc[fila].push(num_butaca);
+            return acc;
+          }, {} as { [key: number]: number[] });
+
+          const butacasAgrupadas = Object.keys(agrupadasPorFila).map(
+            (fila) => ({
+              fila: Number(fila),
+              butacas: agrupadasPorFila[Number(fila)],
+            })
+          );
+          butacasAgrupadas.forEach((butacasPorFila) => {
+            personas.push({
+              asignadoA: nombre,
+              ...butacasPorFila,
+            });
+          });
+        });
+        console.timeEnd('descargar');
+        if (this.representacion) {
+          this.wordService.generateDocument(this.representacion, personas);
+        }
+      });
+    }
+  }
+
+  descargarPlano() {}
 }
