@@ -1,49 +1,7 @@
-<div class="hidden xl:block absolute m-3">
-  <div class="text-lg">
-    <a class="text-accent underline" href="representaciones">Inicio</a>
-    <span> > {{ representacion?.fecha }} - {{ representacion?.sesion }}</span>
-  </div>
-  <div id="miniatura" class="rounded-lg bg-gray-300 mt-3 w-44 h-32"></div>
-  <div
-    id="miniatura-overlay"
-    (click)="changeMini()"
-    class="rounded-lg mt-3 w-44 h-32 absolute top-7 z-50 cursor-pointer"
-  ></div>
-</div>
-<section
-  #planoEntresuelo
-  class="w-fit mx-auto mb-24 relative xl:absolute xl:origin-top-left xl:transition-[top,left,transform] xl:duration-1000"
-  [ngClass]="
-    !miniaturaPatio
-      ? 'xl:scale-[0.18] xl:top-[162px] xl:left-6'
-      : 'xl:left-1/2 xl:-translate-x-1/2 xl:top-28'
-  "
+<!-- <section
+  #descargas
+  class="mx-3 mb-5 relative xl:absolute xl:w-fit origin-top-right right-0"
 >
-  <ng-container
-    *ngTemplateOutlet="
-      planoButacas;
-      context: { butacas: plano?.butacas?.slice(0, 1) } as PlanoButacasContext
-    "
-  ></ng-container>
-</section>
-<section
-  #planoPatio
-  class="w-fit mx-auto mb-24 relative xl:absolute xl:origin-top-left xl:transition-[top,left,transform] xl:duration-1000"
-  [ngClass]="
-    miniaturaPatio
-      ? 'xl:scale-[0.18] xl:top-[162px] xl:left-6'
-      : 'xl:left-1/2 xl:-translate-x-1/2 xl:top-28'
-  "
->
-  <ng-container
-    *ngTemplateOutlet="
-      planoButacas;
-      context: { butacas: plano?.butacas?.slice(1) } as PlanoButacasContext
-    "
-  ></ng-container>
-</section>
-
-<section #descargas class="w-fit mx-3 absolute origin-top-right right-0">
   <div class="flex flex-col items-stretch text-lg gap-2">
     <button
       class="bg-gray-300 px-4 py-2 rounded-lg hover:bg-gray-400"
@@ -59,50 +17,179 @@
     </button>
   </div>
 </section>
+<div class="hidden xl:block absolute m-3">
+  <div class="text-lg">
+    <a class="text-accent underline" href="representaciones">Inicio</a>
+    <span> > {{ representacion?.fecha }} - {{ representacion?.sesion }}</span>
+  </div>
+  <div
+    id="miniatura"
+    class="rounded-lg bg-gray-300 mt-3 w-44 transition-[height] duration-1000"
+    [ngClass]="miniaturaPatio ? 'h-32' : 'h-[70px]'"
+  ></div>
+  <div
+    id="miniatura-overlay"
+    (click)="changeMini()"
+    class="rounded-lg mt-3 w-44 absolute top-7 z-50 cursor-pointer transition-[height] duration-1000"
+    [ngClass]="miniaturaPatio ? 'h-32' : 'h-[70px]'"
+  ></div>
+</div>
+<section
+  #planoEntresuelo
+  class="w-fit mx-auto mb-24 absolute origin-top-left xl:transition-[top,left,transform] xl:duration-1000 top-[220px] scale-[40%] md:scale-90 lg:scale-100"
+  [ngClass]="
+    !miniaturaPatio
+      ? 'xl:scale-[0.17] xl:top-[162px] xl:left-6'
+      : 'xl:left-1/2 xl:-translate-x-1/2 xl:top-28'
+  "
+>
+  <ng-container
+    *ngTemplateOutlet="
+      planoButacas;
+      context: { butacas: plano?.butacas?.slice(0, 12) } as PlanoButacasContext
+    "
+  ></ng-container>
+</section>
+<section
+  #planoPatio
+  class="w-fit mx-auto mb-24 absolute origin-top-left xl:transition-[top,left,transform] xl:duration-1000 top-[380px] md:top-[600px] scale-[40%] md:scale-90 lg:scale-100"
+  [ngClass]="
+    miniaturaPatio
+      ? 'xl:scale-[0.2] xl:top-[162px] xl:left-6'
+      : 'xl:left-1/2 xl:-translate-x-1/2 xl:top-28'
+  "
+>
+  <ng-container
+    *ngTemplateOutlet="
+      planoButacas;
+      context: { butacas: plano?.butacas?.slice(12) } as PlanoButacasContext
+    "
+  ></ng-container>
+</section> -->
+<article>
+  <div class="m-3 text-lg font-bold">
+    <a class="text-accent underline" href="representaciones">Inicio</a>
+    <span> > {{ representacion?.fecha }} - {{ representacion?.sesion }}</span>
+  </div>
+  <section
+    class="grid m-3 grid-cols-2 md:grid-cols-2 xl:grid-cols-12 gap-2 md:gap-0"
+  >
+    <div class="order-1 xl:order-1 xl:col-span-2">
+      <div
+        id="miniatura"
+        class="rounded-lg bg-tertiary dark:bg-dark-tertiary w-44 transition-[height] duration-1000 z-50"
+        [ngClass]="miniaturaPatio ? 'h-32' : 'h-[70px]'"
+      ></div>
+      <div
+        id="miniatura-overlay"
+        (click)="changeMini()"
+        class="absolute rounded-lg w-44 top-36 z-50 cursor-pointer transition-[height] duration-1000"
+        [ngClass]="miniaturaPatio ? 'h-32' : 'h-[70px]'"
+      ></div>
+    </div>
+    <div class="order-3 xl:order-2 xl:col-span-8">
+      <section
+        #planoPatio
+        class="w-fit mx-auto absolute origin-top transition-[top,left,transform] duration-1000"
+        [ngClass]="
+          miniaturaPatio
+            ? 'scale-[0.2] top-[150px] -left-[277px]'
+            : 'scale-[48%] md:scale-90 xl:scale-100 left-1/2 -translate-x-1/2 top-[280px] xl:top-[142px]'
+        "
+      >
+        <ng-container
+          *ngTemplateOutlet="
+            planoButacas;
+            context: {
+              butacas: plano?.butacas?.slice(12)
+            } as PlanoButacasContext
+          "
+        ></ng-container>
+      </section>
+      <section
+        #planoEntresuelo
+        class="w-fit mx-auto absolute origin-top transition-[top,left,transform] duration-1000 xl:top-[150px]"
+        [ngClass]="
+          !miniaturaPatio
+            ? 'scale-[0.17] top-[150px] -left-[347px]'
+            : 'scale-[42%] md:scale-[80%] xl:scale-100 left-1/2 -translate-x-1/2 top-[280px] xl:top-[142px]'
+        "
+      >
+        <ng-container
+          *ngTemplateOutlet="
+            planoButacas;
+            context: {
+              butacas: plano?.butacas?.slice(0, 12)
+            } as PlanoButacasContext
+          "
+        ></ng-container>
+      </section>
+    </div>
+    <div class="order-2 xl:order-3 xl:col-span-2">
+      <div class="flex flex-col items-stretch text-lg gap-2">
+        <button
+          class="bg-tertiary dark:bg-dark-tertiary px-4 py-2 rounded-lg hover:bg-cuaternary dark:hover:bg-dark-cuaternary"
+          (click)="descargarPlano()"
+        >
+          Descargar plano
+        </button>
+        <button
+          class="bg-tertiary dark:bg-dark-tertiary px-4 py-2 rounded-lg hover:bg-cuaternary dark:hover:bg-dark-cuaternary"
+          (click)="descargarButacas()"
+        >
+          Descargar butacas
+        </button>
+      </div>
+    </div>
+  </section>
+</article>
 
 <ng-template #planoButacas let-butacas="butacas">
-  <div *ngFor="let fila of butacas" class="flex min-h-6">
+  <div
+    *ngFor="let fila of butacas"
+    class="flex min-h-6 last:mb-[305px] md:last:mb-[120px] xl:last:mb-24"
+  >
     <div
       *ngFor="let butaca of fila"
       (click)="selectButaca(butaca)"
       (contextmenu)="onRightClick($event, butaca)"
       (right-click)="$event.preventDefault()"
-      class="flex justify-center items-center w-6 h-6 bg-gray-300 rounded-lg m-0.5 has-tooltip has-context-menu cursor-pointer hover:bg-gray-400 hover:shadow-lg hover:scale-110 transition-transform"
+      class="flex justify-center items-center w-6 h-6 bg-tertiary dark:bg-dark-tertiary rounded-lg m-0.5 has-tooltip has-context-menu"
       [ngClass]="
         butaca.estado !== 'Vacia'
-          ? 'cursor-pointer hover:bg-gray-400 hover:shadow-lg hover:scale-110 transition-transform'
-          : 'cursor-not-allowed'
+          ? 'cursor-pointer hover:bg-cuaternary dark:hover:bg-dark-cuaternary hover:shadow-lg hover:scale-110 transition-transform'
+          : 'bg-transparent dark:bg-transparent'
       "
     >
       <ul
-        class="context-menu rounded-lg shadow-lg p-1 bg-slate-100 dark:bg-slate-800 text-slate-800 dark:text-slate-100 top-4 left-4 text-base font-medium w-max"
+        class="context-menu rounded-lg shadow-lg p-1 bg-tertiary dark:bg-dark-tertiary top-4 left-4 text-base font-medium w-max"
         *ngIf="showContextMenu"
         (mouseleave)="showContextMenu = false"
       >
         <li
           *ngIf="butaca?.estado === 'Ocupada' || butaca?.estado === 'Reservada'"
-          class="p-1 rounded-lg hover:bg-slate-300"
+          class="p-1 rounded-lg hover:bg-cuaternary dark:hover:bg-dark-cuaternary"
           (click)="cambioEstado($event, butaca, 'Libre')"
         >
           Liberar
         </li>
         <li
           *ngIf="butaca?.estado === 'Libre'"
-          class="p-1 rounded-lg hover:bg-slate-300"
+          class="p-1 rounded-lg hover:bg-cuaternary dark:hover:bg-dark-cuaternary"
           (click)="cambioEstado($event, butaca, 'Reservada')"
         >
           Reservar
         </li>
         <li
           *ngIf="butaca?.estado === 'Libre'"
-          class="p-1 rounded-lg hover:bg-slate-300"
+          class="p-1 rounded-lg hover:bg-cuaternary dark:hover:bg-dark-cuaternary"
           (click)="cambioEstado($event, butaca, 'Rota')"
         >
           Marcar rota
         </li>
         <li
           *ngIf="butaca?.estado === 'Rota'"
-          class="p-1 rounded-lg hover:bg-slate-300"
+          class="p-1 rounded-lg hover:bg-cuaternary dark:hover:bg-dark-cuaternary"
           (click)="cambioEstado($event, butaca, 'Libre')"
         >
           Marcar arreglada
@@ -112,7 +199,7 @@
       <b class="text-lg">{{ butaca?.fila }}</b>
       } @else if (butaca?.estado === 'Vacia') { } @else {
       <span
-        class="tooltip rounded-lg shadow-lg p-1 bg-slate-100 dark:bg-slate-800 text-slate-800 dark:text-slate-100 -mt-28 text-base font-medium w-max"
+        class="tooltip rounded-lg shadow-lg p-1 bg-tertiary dark:bg-dark-tertiary -mt-28 text-base font-medium w-max"
       >
         <p class="uppercase text-center">{{ butaca?.zona }}</p>
         @if (butaca?.estado === 'Ocupada') {
@@ -140,23 +227,23 @@
 
 <!-- seccion con el escenario -->
 <footer
-  class="bg-gray-300 rounded-lg m-3 shadow-lg fixed bottom-0 w-auto left-0 right-0"
+  class="bg-tertiary dark:bg-dark-tertiary rounded-lg m-3 shadow-lg fixed bottom-0 w-auto left-0 right-0"
 >
-  <div class="grid grid-cols-3 h-20 p-2">
-    <div></div>
-    <h1 class="text-sm md:text-3xl transition-all font-bold m-auto">
+  <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 h-28 md:h-20 p-3">
+    <div class="col-span-1 hidden xl:block"></div>
+    <h1 class="col-span-1 text-sm md:text-3xl transition-all font-bold m-auto">
       ESCENARIO
     </h1>
-    <div class="self-center flex justify-end">
-      <form [formGroup]="planoForm">
+    <div class="col-span-1 self-center">
+      <form [formGroup]="planoForm" class="grid grid-cols-2 gap-3">
         <input
           type="text"
-          class="bg-gray-300 border-b-2 border-gray-400 text-center"
+          class="bg-tertiary dark:bg-dark-tertiary border-b-2 border-cuaternary text-center text-sm md:text-3xl col-span-2 md:col-span-1"
           placeholder="Nombre"
           formControlName="nombre"
         />
         <button
-          class="bg-accent text-white px-4 py-2 rounded-lg mx-6 disabled:opacity-50 disabled:cursor-not-allowed"
+          class="bg-accent hover:bg-opacity-70 dark:hover:bg-opacity-70 text-sm md:text-3xl px-4 py-2 rounded-lg disabled:opacity-50 disabled:cursor-not-allowed col-span-2 md:col-span-1"
           [disabled]="!getEnabled()"
           (click)="guardarButacas()"
         >

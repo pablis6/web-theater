@@ -1,7 +1,8 @@
 import { CommonModule, DatePipe, UpperCasePipe } from '@angular/common';
 import { Component } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
-import { WordService } from '@api/services/word.service';
+import { AsignacionesWordService } from '@api/services/asignaciones-word.service';
+import { PlanoWordService } from '@api/services/plano-word.service';
 import {
   IconComponent,
   Types,
@@ -11,7 +12,12 @@ import {
   selector: 'theater-root',
   standalone: true,
   imports: [CommonModule, RouterOutlet, IconComponent],
-  providers: [DatePipe, UpperCasePipe, WordService],
+  providers: [
+    DatePipe,
+    UpperCasePipe,
+    AsignacionesWordService,
+    PlanoWordService,
+  ],
   templateUrl: './app.component.html',
   styleUrl: './app.component.css',
 })

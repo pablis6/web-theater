@@ -1,5 +1,6 @@
 import { DatePipe, UpperCasePipe } from '@angular/common';
 import { Injectable } from '@angular/core';
+import { Zona_entresuelo } from '@api/types/butacas';
 import { Representacion } from '@api/types/representacion';
 import {
   AlignmentType,
@@ -14,7 +15,7 @@ import { saveAs } from 'file-saver';
 @Injectable({
   providedIn: 'root',
 })
-export class WordService {
+export class AsignacionesWordService {
   constructor(
     private readonly datePipe: DatePipe,
     private readonly upperCasePipe: UpperCasePipe
@@ -55,7 +56,8 @@ export class WordService {
     Packer.toBlob(doc).then((blob) => {
       saveAs(
         blob,
-        representacion?.obra?.name +
+        'Entradas ' +
+          representacion?.obra?.name +
           '_' +
           representacion?.fecha +
           '_' +
@@ -76,6 +78,10 @@ export class WordService {
         if (entradas !== '') {
           entradasParagraph.push(
             new Paragraph({
+              indent: {
+                hanging: '15mm',
+                start: '15mm',
+              },
               children: [
                 new TextRun({
                   text:
@@ -90,15 +96,26 @@ export class WordService {
 
         lastPerson = persona.asignadoA;
         recuentoEntradas = persona.butacas.length;
-        entradas = 'F' + persona.fila + ', ' + this.extract(persona.butacas);
+        entradas =
+          (persona?.zona === Zona_entresuelo ? 'ENTRESUELO F' : 'F') +
+          persona.fila +
+          ', ' +
+          this.extract(persona.butacas);
       } else {
         recuentoEntradas += persona.butacas.length;
         entradas +=
-          ' + F' + persona.fila + ', ' + this.extract(persona.butacas);
+          (persona?.zona === Zona_entresuelo ? ' + ENTRESUELO F' : ' + F') +
+          persona.fila +
+          ', ' +
+          this.extract(persona.butacas);
       }
     });
     entradasParagraph.push(
       new Paragraph({
+        indent: {
+          hanging: '15mm',
+          start: '15mm',
+        },
         children: [
           new TextRun({
             text: lastPerson + ' (' + recuentoEntradas + ') = ' + entradas,

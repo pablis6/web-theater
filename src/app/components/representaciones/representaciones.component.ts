@@ -5,7 +5,7 @@ import { GruposService } from '@api/services/grupos.service';
 import { ObrasService } from '@api/services/obras.service';
 import { PlanosService } from '@api/services/planos.service';
 import { RepresentacionesService } from '@api/services/representaciones.service';
-import { WordService } from '@api/services/word.service';
+// import { WordService } from '@api/services/word.service';
 import { Grupo } from '@api/types/grupo';
 import { Obra } from '@api/types/obra';
 import { Representacion } from '@api/types/representacion';
@@ -44,9 +44,9 @@ export class RepresentacionesComponent {
     private readonly representacionesService: RepresentacionesService,
     private readonly planosService: PlanosService,
     private readonly obrasService: ObrasService,
-    private readonly gruposService: GruposService,
-    private wordService: WordService
-  ) {}
+    private readonly gruposService: GruposService
+  ) // private wordService: WordService
+  {}
 
   ngOnInit() {
     this.obrasService.getAllObra().subscribe((obras) => (this.obras = obras));

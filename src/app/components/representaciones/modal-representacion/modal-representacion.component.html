@@ -3,7 +3,7 @@
   *ngIf="showModal"
 >
   <div
-    class="bg-white w-11/12 md:w-1/2 lg:w-1/3 xl:w-1/4 rounded-lg shadow-xl p-4"
+    class="bg-primary dark:bg-dark-primary w-11/12 md:w-1/2 lg:w-1/3 xl:w-1/4 rounded-lg shadow-xl p-4"
   >
     <h1 class="text-3xl font-bold text-center">
       <span *ngIf="!representacion">Nueva </span
@@ -17,7 +17,7 @@
           <theater-select [selected]="obraSeleccionada?.name">
             <div
               *ngFor="let obra of obras"
-              class="cursor-pointer p-2 flex justify-between"
+              class="cursor-pointer p-2 flex justify-between hover:bg-primary hover:dark:bg-dark-primary"
               (click)="setObra(obra)"
             >
               <span>{{ obra?.name }}</span>
@@ -36,7 +36,7 @@
       <input
         type="date"
         id="fecha"
-        class="border border-gray-400 rounded-lg p-2"
+        class="border border-cuaternary rounded-lg p-2 dark:bg-dark-cuaternary"
         formControlName="fecha"
       />
 
@@ -46,7 +46,7 @@
           <theater-select [selected]="sesionSeleccionada?.label">
             <div
               *ngFor="let sesion of sesiones"
-              class="cursor-pointer p-2 flex justify-between"
+              class="cursor-pointer p-2 flex justify-between hover:bg-cuaternary hover:dark:bg-dark-cuaternary"
               (click)="setSesion(sesion)"
             >
               <span>{{ sesion?.label }}</span>
@@ -67,7 +67,7 @@
           <theater-select [selected]="grupoSeleccionado?.name">
             <div
               *ngFor="let grupo of grupos"
-              class="cursor-pointer p-2 flex justify-between"
+              class="cursor-pointer p-2 flex justify-between hover:bg-primary hover:dark:bg-dark-primary"
               (click)="setGrupo(grupo)"
             >
               <span>{{ grupo?.name }}</span>

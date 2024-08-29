@@ -6,6 +6,11 @@ export type Estado =
   | 'Reservada'
   | 'Seleccionada'
   | 'Rota';
+
+export type Zona = 'patio' | 'entresuelo';
+export const Zona_patio = 'patio';
+export const Zona_entresuelo = 'entresuelo';
+
 export interface Butaca {
   /**
    * La fila de la butaca
@@ -21,6 +26,11 @@ export interface Butaca {
    * El estado de la butaca
    */
   estado: Estado;
+
+  /**
+   * La zona de la butaca
+   */
+  zona: Zona;
 
   /**
    * El id del usuario al que esta asignado
