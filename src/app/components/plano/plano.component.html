@@ -76,14 +76,14 @@
   >
     <div class="order-1 xl:order-1 xl:col-span-2">
       <div
-        id="miniatura"
-        class="rounded-lg bg-tertiary dark:bg-dark-tertiary w-44 transition-[height] duration-1000 z-50"
+        id="miniatura-overlay"
+        (click)="changeMini()"
+        class="absolute rounded-lg w-44 top-36 z-50 cursor-pointer transition-[height] duration-1000 peer"
         [ngClass]="miniaturaPatio ? 'h-32' : 'h-[70px]'"
       ></div>
       <div
-        id="miniatura-overlay"
-        (click)="changeMini()"
-        class="absolute rounded-lg w-44 top-36 z-50 cursor-pointer transition-[height] duration-1000"
+        id="miniatura"
+        class="rounded-lg bg-tertiary dark:bg-dark-tertiary w-44 transition-[height] duration-1000 peer-hover:bg-cuaternary dark:peer-hover:bg-dark-cuaternary"
         [ngClass]="miniaturaPatio ? 'h-32' : 'h-[70px]'"
       ></div>
     </div>
