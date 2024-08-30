@@ -11,13 +11,7 @@ import { AsignacionesWordService } from '@api/services/asignaciones-word.service
 import { PlanoWordService } from '@api/services/plano-word.service';
 import { PlanosService } from '@api/services/planos.service';
 import { RepresentacionesService } from '@api/services/representaciones.service';
-import {
-  Butaca,
-  Estado,
-  Zona,
-  Zona_entresuelo,
-  Zona_patio,
-} from '@api/types/butacas';
+import { Butaca, Zona, Zona_entresuelo, Zona_patio } from '@api/types/butacas';
 import { Plano } from '@api/types/plano';
 import { Representacion } from '@api/types/representacion';
 import { combineLatest } from 'rxjs';
@@ -40,10 +34,14 @@ export class PlanoComponent implements OnInit {
   representacion: Representacion | null = null;
   miniaturaPatio: boolean = false;
 
+  // Contadores de butacas seleccionadas
+  public seleccionadas = 0;
+  public ocupadasSeleccionadas = 0;
+  public rotasSeleccionadas = 0;
+
   planoForm = new FormGroup({
     nombre: new FormControl('', Validators.required),
   });
-  showContextMenu: boolean = false;
 
   constructor(
     private readonly planosService: PlanosService,
@@ -72,41 +70,44 @@ export class PlanoComponent implements OnInit {
     this.miniaturaPatio = !this.miniaturaPatio;
   }
 
-  onRightClick(event: MouseEvent, butaca: Butaca) {
-    if (butaca.estado !== 'Pasillo' && butaca.estado !== 'Vacia') {
-      event.preventDefault();
-      this.showContextMenu = !this.showContextMenu;
-    }
-  }
-
   selectButaca(butaca: Butaca) {
     if (butaca.estado === 'Libre') {
       butaca.estado = 'Seleccionada';
+      this.seleccionadas++;
     } else if (butaca.estado === 'Seleccionada') {
       butaca.estado = 'Libre';
+      this.seleccionadas--;
+    } else if (butaca.estado === 'Ocupada') {
+      butaca.estado = 'Ocupada seleccionada';
+      this.ocupadasSeleccionadas++;
+    } else if (butaca.estado === 'Ocupada seleccionada') {
+      butaca.estado = 'Ocupada';
+      this.ocupadasSeleccionadas--;
+    } else if (butaca.estado === 'Rota') {
+      butaca.estado = 'Rota seleccionada';
+      this.rotasSeleccionadas++;
+    } else if (butaca.estado === 'Rota seleccionada') {
+      butaca.estado = 'Rota';
+      this.rotasSeleccionadas--;
     }
   }
 
-  cambioEstado(event: Event, butaca: Butaca, nuevo_estado: Estado) {
-    event.stopPropagation();
-    butaca.estado = nuevo_estado;
-    this.planosService
-      .updateSeat(this.representacionId, this.plano?.butacas || [])
-      .subscribe((planoActualizado: Plano) => {
-        this.plano = planoActualizado;
-      });
-  }
-
-  getEnabled() {
+  /**
+   * Indica si hay alguna butaca rota seleccionada o alguna butaca seleccionada para marcar como rota
+   * @returns true si hay alguna butaca que marcar como rota o como arreglada
+   */
+  getMarcarDesmarcarRotaDisabled() {
     return (
-      this.planoForm.valid &&
-      this.plano?.butacas.some((fila) =>
-        fila.some((butaca) => butaca.estado === 'Seleccionada')
-      )
+      this.ocupadasSeleccionadas !== 0 ||
+      (this.seleccionadas === 0 && this.rotasSeleccionadas === 0) ||
+      (this.rotasSeleccionadas !== 0 && this.seleccionadas !== 0)
     );
   }
 
-  guardarButacas() {
+  /**
+   * Marca las butacas libre seleccionadas como ocupadas y asigna el nombre de la persona
+   */
+  asignarButacas() {
     this.plano?.butacas.forEach((fila) => {
       fila.forEach((butaca) => {
         if (butaca.estado === 'Seleccionada') {
@@ -115,14 +116,58 @@ export class PlanoComponent implements OnInit {
         }
       });
     });
+    this.guardarPlano();
+  }
+
+  /**
+   * Marca las butacas seleccionadas ocupadas como libres y quita el nombre de la persona a la que estaban asignadas
+   */
+  desasignarButacas() {
+    this.plano?.butacas.forEach((fila) => {
+      fila.forEach((butaca) => {
+        if (butaca.estado === 'Ocupada seleccionada') {
+          butaca.asignadoA = undefined;
+          butaca.estado = 'Libre';
+        }
+      });
+    });
+    this.guardarPlano();
+  }
+
+  /**
+   * Marca las butacas seleccionadas como rotas o las rotas como arregladas
+   */
+  marcarDesmarcarRota() {
+    this.plano?.butacas.forEach((fila) => {
+      fila.forEach((butaca) => {
+        if (butaca.estado === 'Seleccionada') {
+          butaca.estado = 'Rota';
+        } else if (butaca.estado === 'Rota seleccionada') {
+          butaca.estado = 'Libre';
+        }
+      });
+    });
+    this.guardarPlano();
+  }
+
+  /**
+   * Guarda el plano en la base de datos
+   */
+  guardarPlano() {
+    this.planoForm.reset();
+    this.seleccionadas = 0;
+    this.ocupadasSeleccionadas = 0;
+    this.rotasSeleccionadas = 0;
     this.planosService
       .updateSeat(this.representacionId, this.plano?.butacas || [])
       .subscribe((planoActualizado: Plano) => {
         this.plano = planoActualizado;
-        this.planoForm.reset();
       });
   }
 
+  /**
+   * Descarga el word con el listado de asignaciones de las butacas
+   */
   descargarButacas() {
     console.time('descargarButacas');
     if (!this.representacion) {
@@ -178,6 +223,9 @@ export class PlanoComponent implements OnInit {
     });
   }
 
+  /**
+   * Descarga el word con el plano de butacas
+   */
   descargarPlano() {
     console.time('descargarPlano');
     if (!this.plano) {

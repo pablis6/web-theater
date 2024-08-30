@@ -3,9 +3,10 @@ export type Estado =
   | 'Vacia'
   | 'Libre'
   | 'Ocupada'
-  | 'Reservada'
+  | 'Ocupada seleccionada'
   | 'Seleccionada'
-  | 'Rota';
+  | 'Rota'
+  | 'Rota seleccionada';
 
 export type Zona = 'patio' | 'entresuelo';
 export const Zona_patio = 'patio';

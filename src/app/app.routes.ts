@@ -4,6 +4,11 @@ import { RepresentacionesComponent } from '@components/representaciones/represen
 
 export const routes: Routes = [
   {
+    path: '',
+    pathMatch: 'full',
+    redirectTo: 'representaciones',
+  },
+  {
     path: 'representaciones',
     children: [
       {
@@ -16,8 +21,8 @@ export const routes: Routes = [
       },
     ],
   },
-  // {
-  //   path: '**',
-  //   redirectTo: 'representaciones',
-  // },
+  {
+    path: '**',
+    redirectTo: 'representaciones',
+  },
 ];

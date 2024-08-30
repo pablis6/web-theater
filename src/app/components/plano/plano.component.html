@@ -128,16 +128,16 @@
     <div class="order-2 xl:order-3 xl:col-span-2">
       <div class="flex flex-col items-stretch text-lg gap-2">
         <button
-          class="bg-tertiary dark:bg-dark-tertiary px-4 py-2 rounded-lg hover:bg-cuaternary dark:hover:bg-dark-cuaternary"
+          class="bg-tertiary dark:bg-dark-tertiary px-4 py-1 md:py-2 rounded-lg hover:bg-cuaternary dark:hover:bg-dark-cuaternary"
           (click)="descargarPlano()"
         >
           Descargar plano
         </button>
         <button
-          class="bg-tertiary dark:bg-dark-tertiary px-4 py-2 rounded-lg hover:bg-cuaternary dark:hover:bg-dark-cuaternary"
+          class="bg-tertiary dark:bg-dark-tertiary px-4 py-1 md:py-2 rounded-lg hover:bg-cuaternary dark:hover:bg-dark-cuaternary"
           (click)="descargarButacas()"
         >
-          Descargar butacas
+          Descargar listado
         </button>
       </div>
     </div>
@@ -152,16 +152,14 @@
     <div
       *ngFor="let butaca of fila"
       (click)="selectButaca(butaca)"
-      (contextmenu)="onRightClick($event, butaca)"
-      (right-click)="$event.preventDefault()"
-      class="flex justify-center items-center w-6 h-6 bg-tertiary dark:bg-dark-tertiary rounded-lg m-0.5 has-tooltip has-context-menu"
+      class="flex justify-center items-center w-6 h-6 bg-tertiary dark:bg-dark-tertiary rounded-lg m-0.5 has-tooltip"
       [ngClass]="
         butaca.estado !== 'Vacia'
           ? 'cursor-pointer hover:bg-cuaternary dark:hover:bg-dark-cuaternary hover:shadow-lg hover:scale-110 transition-transform'
           : 'bg-transparent dark:bg-transparent'
       "
     >
-      <ul
+      <!-- <ul
         class="context-menu rounded-lg shadow-lg p-1 bg-tertiary dark:bg-dark-tertiary top-4 left-4 text-base font-medium w-max"
         *ngIf="showContextMenu"
         (mouseleave)="showContextMenu = false"
@@ -194,7 +192,7 @@
         >
           Marcar arreglada
         </li>
-      </ul>
+      </ul> -->
       @if (butaca?.estado === 'Pasillo') {
       <b class="text-lg">{{ butaca?.fila }}</b>
       } @else if (butaca?.estado === 'Vacia') { } @else {
@@ -202,7 +200,8 @@
         class="tooltip rounded-lg shadow-lg p-1 bg-tertiary dark:bg-dark-tertiary -mt-28 text-base font-medium w-max"
       >
         <p class="uppercase text-center">{{ butaca?.zona }}</p>
-        @if (butaca?.estado === 'Ocupada') {
+        @if (butaca?.estado === 'Ocupada seleccionada' || butaca?.estado ===
+        "Ocupada") {
         <p>{{ butaca?.asignadoA }}</p>
         } @else {
         <p>{{ butaca?.estado }}</p>
@@ -212,10 +211,11 @@
       <div
         [ngClass]="{
           'text-green-500': butaca?.estado === 'Libre',
-          'text-red-500': butaca?.estado === 'Ocupada',
-          'text-yellow-500': butaca?.estado === 'Reservada',
           'text-blue-500': butaca?.estado === 'Seleccionada',
-          'text-red-300': butaca?.estado === 'Rota'
+          'text-red-500': butaca?.estado === 'Ocupada',
+          'text-yellow-500': butaca?.estado === 'Ocupada seleccionada',
+          'text-purple-700': butaca?.estado === 'Rota',
+          'text-purple-400': butaca?.estado === 'Rota seleccionada'
         }"
       >
         <theater-icon [type]="Types.seat" [width]="23"></theater-icon>
@@ -229,25 +229,57 @@
 <footer
   class="bg-tertiary dark:bg-dark-tertiary rounded-lg m-3 shadow-lg fixed bottom-0 w-auto left-0 right-0"
 >
-  <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 h-28 md:h-20 p-3">
-    <div class="col-span-1 hidden xl:block"></div>
-    <h1 class="col-span-1 text-sm md:text-3xl transition-all font-bold m-auto">
+  <div class="grid grid-cols-2 md:grid-cols-5 p-3 gap-x-3">
+    <div
+      class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 order-2 md:order-1 col-span-1 md:col-span-2 self-center"
+    >
+      <button
+        class="bg-accent hover:bg-opacity-70 dark:hover:bg-opacity-70 text-sm md:text-md px-4 py-1 md:py-2 rounded-lg disabled:opacity-50 disabled:cursor-not-allowed col-span-2 md:col-span-1"
+        [disabled]="getMarcarDesmarcarRotaDisabled()"
+        (click)="marcarDesmarcarRota()"
+      >
+        (Des)marcar rota
+      </button>
+    </div>
+    <h1
+      class="order-1 md:order-2 col-span-2 md:col-span-1 text-sm md:text-2xl xl:text-3xl transition-all font-bold m-auto"
+    >
       ESCENARIO
     </h1>
-    <div class="col-span-1 self-center">
+    <div class="order-3 md:order-3 col-span-1 md:col-span-2 self-center">
       <form [formGroup]="planoForm" class="grid grid-cols-2 gap-3">
         <input
+          *ngIf="ocupadasSeleccionadas === 0"
           type="text"
-          class="bg-tertiary dark:bg-dark-tertiary border-b-2 border-cuaternary text-center text-sm md:text-3xl col-span-2 md:col-span-1"
+          class="bg-tertiary dark:bg-dark-tertiary border-b-2 border-cuaternary text-center text-sm md:text-xl xl:text-3xl col-span-2 md:col-span-1"
           placeholder="Nombre"
           formControlName="nombre"
         />
         <button
-          class="bg-accent hover:bg-opacity-70 dark:hover:bg-opacity-70 text-sm md:text-3xl px-4 py-2 rounded-lg disabled:opacity-50 disabled:cursor-not-allowed col-span-2 md:col-span-1"
-          [disabled]="!getEnabled()"
-          (click)="guardarButacas()"
+          *ngIf="ocupadasSeleccionadas === 0"
+          class="bg-accent hover:bg-opacity-70 dark:hover:bg-opacity-70 text-sm md:text-xl xl:text-3xl px-4 py-1 md:py-2 rounded-lg disabled:opacity-50 disabled:cursor-not-allowed col-span-2 md:col-span-1"
+          [disabled]="
+            planoForm.invalid ||
+            seleccionadas === 0 ||
+            ocupadasSeleccionadas !== 0 ||
+            rotasSeleccionadas !== 0
+          "
+          (click)="asignarButacas()"
         >
-          Guardar
+          Asignar
+        </button>
+        <!-- <div *ngIf="ocupadasSeleccionadas !== 0"></div> -->
+        <button
+          *ngIf="ocupadasSeleccionadas !== 0"
+          class="bg-accent hover:bg-opacity-70 dark:hover:bg-opacity-70 text-sm md:text-3xl px-4 py-1 md:py-2 rounded-lg disabled:opacity-50 disabled:cursor-not-allowed col-span-2 md:col-span-1 md:col-start-2"
+          [disabled]="
+            seleccionadas !== 0 ||
+            ocupadasSeleccionadas === 0 ||
+            rotasSeleccionadas !== 0
+          "
+          (click)="desasignarButacas()"
+        >
+          Desasignar
         </button>
       </form>
     </div>

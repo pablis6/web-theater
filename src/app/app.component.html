@@ -3,33 +3,33 @@
     <img
       src="./app/assets/img/LOGO-TEATRO-MENE.svg"
       alt="Logo"
-      class="col-span-2 h-14 rounded-lg"
+      class="col-span-3 h-14 rounded-lg"
     />
     <h1
-      class="col-span-8 text-sm md:text-2xl xl:text-4xl transition-all font-bold m-auto"
+      class="col-span-7 text-sm md:text-2xl xl:text-4xl text-center transition-all font-bold m-auto"
     >
       Gestión entradas Teatro Menesiano
     </h1>
     <div class="col-span-2 self-center justify-self-end">
       <div
         (click)="toggleTheme()"
-        class="flex pointer-events-auto h-8 w-16 rounded-full p-1 ring-1 ring-inset transition duration-200 ease-in-out bg-dark-primary ring-black/20 cursor-pointer"
+        class="flex pointer-events-auto h-6 w-12 md:h-8 md:w-16 rounded-full p-1 ring-1 ring-inset transition duration-200 ease-in-out bg-dark-primary ring-black/20 cursor-pointer"
         [ngClass]="{ 'dark:bg-blue-300 ring-slate-900/5': isDark }"
       >
         <theater-icon
           *ngIf="isDark"
           [type]="Types.sun"
-          class="text-orange-400 transition duration-200 ease-in-out translate-x-1 translate-y-1"
+          class="text-orange-400 transition duration-200 ease-in-out md:translate-x-1 md:translate-y-1"
           [width]="16"
         />
         <div
-          class="h-6 w-6 rounded-full bg-primary shadow-sm ring-1 ring-slate-700/10 transition duration-200 ease-in-out dark:translate-x-4 dark:bg-dark-primary hover:bg-cuaternary dark:hover:bg-dark-cuaternary"
+          class="h-4 md:h-6 w-4 md:w-6 rounded-full bg-primary shadow-sm ring-1 ring-slate-700/10 transition duration-200 ease-in-out dark:translate-x-2 dark:md:translate-x-4 dark:bg-dark-primary hover:bg-cuaternary dark:hover:bg-dark-cuaternary"
         ></div>
 
         <theater-icon
           *ngIf="!isDark"
           [type]="Types.moon"
-          class="text-yellow-400 transition duration-200 ease-in-out translate-x-3 translate-y-1"
+          class="text-yellow-400 transition duration-200 ease-in-out translate-x-2 md:translate-x-3 md:translate-y-1"
           [width]="16"
         />
       </div>
