@@ -3,12 +3,13 @@ import { Injectable } from '@angular/core';
 import { Butaca } from '@api/types/butacas';
 import { Plano } from '@api/types/plano';
 import { Observable } from 'rxjs';
+import { environment } from '../../../environments/environment';
 
 @Injectable({
   providedIn: 'root',
 })
 export class PlanosService {
-  private apiUrl = 'http://localhost:1993/api/v1/planos';
+  private apiUrl = environment.api + '/api/v1/planos';
 
   constructor(private http: HttpClient) {}
 

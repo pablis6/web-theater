@@ -45,8 +45,7 @@ export class RepresentacionesComponent {
     private readonly planosService: PlanosService,
     private readonly obrasService: ObrasService,
     private readonly gruposService: GruposService
-  ) // private wordService: WordService
-  {}
+  ) {}
 
   ngOnInit() {
     this.obrasService.getAllObra().subscribe((obras) => (this.obras = obras));

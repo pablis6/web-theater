@@ -2,12 +2,13 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Grupo } from '@api/types/grupo';
 import { Observable } from 'rxjs';
+import { environment } from '../../../environments/environment';
 
 @Injectable({
   providedIn: 'root',
 })
 export class GruposService {
-  private baseUrl = 'http://localhost:1993/api/v1/grupos'; // Ajusta esta URL a tu entorno de desarrollo
+  private baseUrl = environment.api + '/api/v1/grupos'; // Ajusta esta URL a tu entorno de desarrollo
 
   constructor(private http: HttpClient) {}
 
