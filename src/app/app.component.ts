@@ -3,6 +3,7 @@ import { Component } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { AsignacionesWordService } from '@api/services/asignaciones-word.service';
 import { PlanoWordService } from '@api/services/plano-word.service';
+import packageJson from '../../package.json';
 import {
   IconComponent,
   Types,
@@ -24,6 +25,8 @@ import {
 export class AppComponent {
   Types = Types;
   public isDark = false;
+  public version = packageJson.version;
+
   constructor() {
     Boolean(localStorage.getItem('darkmode')) !== this.isDark
       ? this.toggleTheme()

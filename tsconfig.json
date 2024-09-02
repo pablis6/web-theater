@@ -19,6 +19,8 @@
     "target": "ES2022",
     "module": "ES2022",
     "lib": ["ES2022", "dom"],
+    "resolveJsonModule": true,
+    "allowSyntheticDefaultImports": true,
     "paths": {
       "@components/*": ["./src/app/components/*"],
       "@assets/*": ["./src/app/assets/*"],
