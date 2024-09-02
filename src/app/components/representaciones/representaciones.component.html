@@ -55,6 +55,17 @@
         </tr>
       </thead>
       <tbody>
+        @if(representaciones.length === 0){
+        <tr
+          class="grid grid-cols-1 border-t-0 md:border-t-4 border-t-primary dark:border-t-dark-primary rounded-t-lg md:rounded-t-none rounded-b-lg [&>td]:content-center [&>td]:px-4 py-3 md:py-0 bg-slate-400 dark:bg-slate-700"
+        >
+          <td
+            class="border-r-0 dark:border-r-dark-primary col-span-1 h-6 md:h-auto md:p-4 text-center"
+          >
+            <span>No hay representaciones</span>
+          </td>
+        </tr>
+        } @else {
         <tr
           class="grid grid-cols-1 md:grid-cols-12 border-t-0 md:border-t-4 border-t-primary dark:border-t-dark-primary first:rounded-t-lg md:first:rounded-t-none last:rounded-b-lg [&>td]:content-center [&>td]:px-4 py-3 md:py-0 last:[&>td]:px-2 cursor-pointer hover:bg-accentsoft dark:hover:bg-dark-accentsoft hover:bg-opacity-50 dark:hover:bg-opacity-50"
           (click)="verPlano(repre)"
@@ -96,17 +107,17 @@
           </td>
           <td class="col-span-12 md:col-span-2 grid grid-cols-2 gap-3">
             <!-- <button
-              class="md:col-span-1 m-auto bg-accent text-secondary rounded-full overflow-hidden"
-              (click)="verPlano(repre)"
-            >
-              <theater-icon [type]="Types.theater" class="h-7" [width]="50" />
-            </button>
-            <button
-              class="md:col-span-1 m-auto bg-accent text-secondary rounded-full"
-              (click)="descargar(repre)"
-            >
-              <theater-icon [type]="Types.download" class="h-7" [width]="50" />
-            </button> -->
+                class="md:col-span-1 m-auto bg-accent text-secondary rounded-full overflow-hidden"
+                (click)="verPlano(repre)"
+              >
+                <theater-icon [type]="Types.theater" class="h-7" [width]="50" />
+              </button>
+              <button
+                class="md:col-span-1 m-auto bg-accent text-secondary rounded-full"
+                (click)="descargar(repre)"
+              >
+                <theater-icon [type]="Types.download" class="h-7" [width]="50" />
+              </button> -->
             <button
               class="md:col-span-1 m-auto bg-accent hover:bg-opacity-70 dark:hover:bg-opacity-70 rounded-full"
               (click)="$event.stopPropagation(); openModalRepresentacion(repre)"
@@ -121,6 +132,7 @@
             </button>
           </td>
         </tr>
+        }
       </tbody>
     </table>
   </div>
