@@ -25,10 +25,13 @@ export class AppComponent {
   Types = Types;
   public isDark = false;
   constructor() {
-    // this.toggleTheme();
+    Boolean(localStorage.getItem('darkmode')) !== this.isDark
+      ? this.toggleTheme()
+      : null;
   }
 
   toggleTheme(): void {
+    localStorage.setItem('darkmode', String(!this.isDark));
     this.isDark = !this.isDark;
     document.documentElement.classList.toggle('dark');
   }
