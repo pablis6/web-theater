@@ -1,6 +1,6 @@
 # WebTheater
 
-Web Angular para aplicación gestora de entradas de teatro.
+Web Angular para aplicación de gestión de entradas de teatro para el Teatro Menesiano de Madrid. Solo para uso interno
 
 This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 18.1.0.
 
