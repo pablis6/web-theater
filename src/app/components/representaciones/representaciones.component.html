@@ -1,5 +1,5 @@
 <section
-  class="xl:container w-auto mx-3 xl:mx-auto grid grid-cols-1 md:grid-cols-12"
+  class="xl:container w-auto mx-3 xl:mx-auto grid grid-cols-1 md:grid-cols-12 auto-rows-min min-h-[calc(100vh_-_125px)]"
 >
   <div
     class="mt-8 sm:mx-0 flex flex-col md:flex-row justify-end col-span-12 gap-3 md:gap-5"
@@ -126,7 +126,7 @@
             </button>
             <button
               class="md:col-span-1 m-auto bg-accent hover:bg-opacity-70 dark:hover:bg-opacity-70 rounded-full my-2"
-              (click)="$event.stopPropagation(); eliminar(repre)"
+              (click)="$event.stopPropagation(); openModalBorar(repre)"
             >
               <theater-icon [type]="Types.delete" [width]="50" />
             </button>
@@ -137,6 +137,13 @@
     </table>
   </div>
 </section>
+<footer class="w-full z-0">
+  <div class="text-xs flex justify-center flex-col md:flex-row items-center">
+    <pre>Versión {{ version }} - </pre>
+    <pre>Creado por Pablo Fernández </pre>
+    <pre>para el Teatro Menesiano con ❤️</pre>
+  </div>
+</footer>
 
 <theater-modal-representacion
   [showModal]="showModalRepresentacion"
@@ -145,10 +152,17 @@
   [representacion]="representacionSeleccionada"
   [obras]="obras"
   [grupos]="grupos"
-></theater-modal-representacion>
+/>
 
 <theater-modal-obra
   [showModal]="showModalObra"
   (cancel)="cancelObra()"
   (save)="saveObra($event)"
-></theater-modal-obra>
+/>
+
+<theater-modal-borrar
+  [showModal]="showModalBorrar"
+  [representacion]="representacionSeleccionada"
+  (cancel)="cancelBorrar()"
+  (delete)="deleteRepresentacion($event)"
+/>

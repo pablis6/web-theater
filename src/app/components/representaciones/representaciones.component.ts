@@ -3,7 +3,6 @@ import { Component, TrackByFunction } from '@angular/core';
 import { Router } from '@angular/router';
 import { GruposService } from '@api/services/grupos.service';
 import { ObrasService } from '@api/services/obras.service';
-import { PlanosService } from '@api/services/planos.service';
 import { RepresentacionesService } from '@api/services/representaciones.service';
 // import { WordService } from '@api/services/word.service';
 import { Grupo } from '@api/types/grupo';
@@ -13,6 +12,8 @@ import {
   IconComponent,
   Types,
 } from '@components/icons/theater-icons.component';
+import packageJson from '../../../../package.json';
+import { ModalBorrarComponent } from './modal-borrar/modal-borrar.component';
 import { ModalObraComponent } from './modal-obra/modal-obra.component';
 import { ModalRepresentacionComponent } from './modal-representacion/modal-representacion.component';
 
@@ -24,15 +25,18 @@ import { ModalRepresentacionComponent } from './modal-representacion/modal-repre
     IconComponent,
     ModalRepresentacionComponent,
     ModalObraComponent,
+    ModalBorrarComponent,
   ],
   providers: [RepresentacionesService, DatePipe],
   templateUrl: './representaciones.component.html',
 })
 export class RepresentacionesComponent {
+  public version = packageJson.version;
   public representaciones: Representacion[] = [];
   public Types = Types;
   public showModalRepresentacion = false;
   public showModalObra = false;
+  public showModalBorrar = false;
   public obras: Obra[] = [];
   public grupos: Grupo[] = [];
   public representacionSeleccionada: Representacion | null = null;
@@ -42,7 +46,6 @@ export class RepresentacionesComponent {
   constructor(
     private readonly router: Router,
     private readonly representacionesService: RepresentacionesService,
-    private readonly planosService: PlanosService,
     private readonly obrasService: ObrasService,
     private readonly gruposService: GruposService
   ) {}
@@ -179,11 +182,23 @@ export class RepresentacionesComponent {
       });
   }
 
+  openModalBorar(repre: Representacion) {
+    this.representacionSeleccionada = repre;
+    this.showModalBorrar = true;
+  }
+
+  cancelBorrar() {
+    this.showModalBorrar = false;
+    this.representacionSeleccionada = null;
+  }
+
   /**
    * Elimina una representacion
    * @param repre la representacion a eliminar
    */
-  eliminar(repre: Representacion) {
+  deleteRepresentacion(repre: Representacion) {
+    this.showModalBorrar = false;
+    this.representacionSeleccionada = null;
     this.representacionesService
       .deleteRepresentacion(repre.id)
       .subscribe(() => {
@@ -220,6 +235,7 @@ export class RepresentacionesComponent {
 
   cancelRepresentacion() {
     this.showModalRepresentacion = false;
+    this.representacionSeleccionada = null;
   }
 
   saveObra({ obra }: { obra: string }) {

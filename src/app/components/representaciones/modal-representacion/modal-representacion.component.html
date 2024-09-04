@@ -17,7 +17,7 @@
           <theater-select [selected]="obraSeleccionada?.name">
             <div
               *ngFor="let obra of obras"
-              class="cursor-pointer p-2 flex justify-between hover:bg-primary hover:dark:bg-dark-primary"
+              class="cursor-pointer p-2 flex justify-between hover:bg-primary hover:dark:bg-dark-primary hover:first:rounded-t-lg hover:last:rounded-b-lg"
               (click)="setObra(obra)"
             >
               <span>{{ obra?.name }}</span>
@@ -46,7 +46,7 @@
           <theater-select [selected]="sesionSeleccionada?.label">
             <div
               *ngFor="let sesion of sesiones"
-              class="cursor-pointer p-2 flex justify-between hover:bg-cuaternary hover:dark:bg-dark-cuaternary"
+              class="cursor-pointer p-2 flex justify-between hover:bg-primary hover:dark:bg-dark-primary hover:first:rounded-t-lg hover:last:rounded-b-lg"
               (click)="setSesion(sesion)"
             >
               <span>{{ sesion?.label }}</span>
@@ -67,7 +67,7 @@
           <theater-select [selected]="grupoSeleccionado?.name">
             <div
               *ngFor="let grupo of grupos"
-              class="cursor-pointer p-2 flex justify-between hover:bg-primary hover:dark:bg-dark-primary"
+              class="cursor-pointer p-2 flex justify-between hover:bg-primary hover:dark:bg-dark-primary hover:first:rounded-t-lg hover:last:rounded-b-lg"
               (click)="setGrupo(grupo)"
             >
               <span>{{ grupo?.name }}</span>
