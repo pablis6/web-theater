@@ -8,7 +8,7 @@ import { Representacion } from '../types/representacion';
   providedIn: 'root',
 })
 export class RepresentacionesService {
-  private apiUrl = environment.api + '/api/v1/representaciones'; // Ajusta esto a la URL base de tu API
+  private apiUrl = environment.api + '/api/v1/representaciones';
 
   constructor(private http: HttpClient) {}
 

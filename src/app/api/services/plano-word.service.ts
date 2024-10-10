@@ -120,7 +120,6 @@ export class PlanoWordService {
     const table = new Table({ columnWidths: [91], rows: [] });
 
     butacas.slice(start, end).forEach((fila) => {
-      // if (fila[0]?.zona !== type) return;
       const tableRow = new TableRow({
         children: [],
         height: { value: '6mm', rule: 'exact' },
@@ -198,13 +197,6 @@ export class PlanoWordService {
       }
       table.addChildElement(tableRow);
     });
-    // const tableRow = new TableRow({
-    //   children: [
-    //     new TableCell({
-    //       children: [new Paragraph('')],
-    //     }),
-    //   ],
-    // });
 
     return [table];
   }
