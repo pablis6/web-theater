@@ -1,10 +1,11 @@
 {
   "name": "web-theater",
-  "version": "0.0.1",
+  "version": "1.0.0",
   "scripts": {
     "ng": "ng",
     "start": "ng serve --configuration development",
-    "build": "ng build --configuration production",
+    "build:staging": "ng build --configuration staging",
+    "build:production": "ng build --configuration production",
     "watch": "ng build --watch --configuration development",
     "test": "ng test"
   },
