@@ -67,22 +67,7 @@ export class PlanoComponent implements OnInit {
         this.plano = plano;
         this.representacion = representacion;
         // Recuento de butacas ocupadas y libres
-        const recuento = plano?.butacas.reduce(
-          (acc, fila) => {
-            fila.forEach((butaca) => {
-              if (butaca.estado === 'Ocupada') {
-                acc.ocupadas++;
-              } else if (butaca.estado === 'Libre') {
-                acc.libres++;
-              }
-            });
-            return acc;
-          },
-          { ocupadas: 0, libres: 0 }
-        ) || { ocupadas: 0, libres: 0 };
-
-        this.recuentoOcupadas = recuento.ocupadas;
-        this.recuentoLibres = recuento.libres;
+        this.recuentoButacas(this.plano?.butacas || []);
       });
     });
   }
@@ -183,7 +168,29 @@ export class PlanoComponent implements OnInit {
       .updateSeat(this.representacionId, this.plano?.butacas || [])
       .subscribe((planoActualizado: Plano) => {
         this.plano = planoActualizado;
+        this.recuentoButacas(this.plano?.butacas || []);
       });
+  }
+
+  private recuentoButacas(butacas: Butaca[][]) {
+    console.time('recuentoButacas');
+    const recuento = butacas.reduce(
+      (acc, fila) => {
+        fila.forEach((butaca) => {
+          if (butaca.estado === 'Ocupada') {
+            acc.ocupadas++;
+          } else if (butaca.estado === 'Libre') {
+            acc.libres++;
+          }
+        });
+        return acc;
+      },
+      { ocupadas: 0, libres: 0 }
+    ) || { ocupadas: 0, libres: 0 };
+
+    this.recuentoOcupadas = recuento.ocupadas;
+    this.recuentoLibres = recuento.libres;
+    console.timeEnd('recuentoButacas');
   }
 
   /**
