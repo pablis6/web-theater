@@ -34,6 +34,10 @@ export class PlanoComponent implements OnInit {
   representacion: Representacion | null = null;
   miniaturaPatio: boolean = false;
 
+  // Recuento de butacas ocupadas
+  public recuentoOcupadas = 0;
+  public recuentoLibres = 0;
+
   // Contadores de butacas seleccionadas
   public seleccionadas = 0;
   public ocupadasSeleccionadas = 0;
@@ -62,6 +66,23 @@ export class PlanoComponent implements OnInit {
       ]).subscribe(([plano, representacion]) => {
         this.plano = plano;
         this.representacion = representacion;
+        // Recuento de butacas ocupadas y libres
+        const recuento = plano?.butacas.reduce(
+          (acc, fila) => {
+            fila.forEach((butaca) => {
+              if (butaca.estado === 'Ocupada') {
+                acc.ocupadas++;
+              } else if (butaca.estado === 'Libre') {
+                acc.libres++;
+              }
+            });
+            return acc;
+          },
+          { ocupadas: 0, libres: 0 }
+        ) || { ocupadas: 0, libres: 0 };
+
+        this.recuentoOcupadas = recuento.ocupadas;
+        this.recuentoLibres = recuento.libres;
       });
     });
   }

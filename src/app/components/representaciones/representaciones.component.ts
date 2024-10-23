@@ -11,6 +11,7 @@ import {
   IconComponent,
   Types,
 } from '@components/icons/theater-icons.component';
+import { LoadingComponent } from '@components/shared/loading/loading.component';
 import packageJson from '../../../../package.json';
 import { ModalBorrarComponent } from './modal-borrar/modal-borrar.component';
 import { ModalObraComponent } from './modal-obra/modal-obra.component';
@@ -25,6 +26,7 @@ import { ModalRepresentacionComponent } from './modal-representacion/modal-repre
     ModalRepresentacionComponent,
     ModalObraComponent,
     ModalBorrarComponent,
+    LoadingComponent,
   ],
   providers: [RepresentacionesService, DatePipe],
   templateUrl: './representaciones.component.html',
@@ -39,6 +41,7 @@ export class RepresentacionesComponent {
   public obras: Obra[] = [];
   public grupos: Grupo[] = [];
   public representacionSeleccionada: Representacion | null = null;
+  public isLoading = false;
 
   trackByFn: TrackByFunction<Representacion> = (index, item) => item.id;
 
@@ -50,7 +53,11 @@ export class RepresentacionesComponent {
   ) {}
 
   ngOnInit() {
-    this.obrasService.getAllObra().subscribe((obras) => (this.obras = obras));
+    this.isLoading = true;
+    this.obrasService.getAllObra().subscribe((obras) => {
+      this.isLoading = false;
+      this.obras = obras;
+    });
 
     this.gruposService
       .getAllGrupos()
