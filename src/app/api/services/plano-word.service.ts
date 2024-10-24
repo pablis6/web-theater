@@ -162,6 +162,7 @@ export class PlanoWordService {
               },
               shading: {
                 fill: butaca?.estado === 'Ocupada' ? '#ffff00' : '#ffffff',
+                type: butaca?.estado === 'Rota' ? 'thinDiagStripe' : 'clear',
               },
               verticalAlign: AlignmentType.CENTER,
               children: [
