@@ -26,7 +26,8 @@ export class AppComponent {
   public isDark = false;
 
   constructor() {
-    Boolean(localStorage.getItem('darkmode')) !== this.isDark
+    (JSON.parse(localStorage.getItem('darkmode') || 'false') as Boolean) !==
+    this.isDark
       ? this.toggleTheme()
       : null;
   }

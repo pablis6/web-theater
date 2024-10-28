@@ -26,7 +26,7 @@
         [ngClass]="
           miniaturaPatio
             ? 'scale-[0.2] top-[150px] -left-[277px]'
-            : 'scale-[48%] md:scale-90 xl:scale-100 left-1/2 -translate-x-1/2 top-[280px] xl:top-[142px]'
+            : 'scale-[48%] md:scale-90 xl:scale-100 left-1/2 -translate-x-1/2 top-[300px] xl:top-[142px]'
         "
       >
         <ng-container
@@ -44,7 +44,7 @@
         [ngClass]="
           !miniaturaPatio
             ? 'scale-[0.17] top-[150px] -left-[347px]'
-            : 'scale-[42%] md:scale-[80%] xl:scale-100 left-1/2 -translate-x-1/2 top-[280px] xl:top-[142px]'
+            : 'scale-[42%] md:scale-[80%] xl:scale-100 left-1/2 -translate-x-1/2 top-[300px] xl:top-[142px]'
         "
       >
         <ng-container
@@ -71,6 +71,20 @@
         >
           Descargar listado
         </button>
+        <div class="flex self-center gap-3">
+          <theater-icon
+            class="text-green-500"
+            [type]="Types.seat"
+            [width]="23"
+          ></theater-icon>
+          <span>{{ recuentoLibres }}</span>
+          <theater-icon
+            class="text-red-500"
+            [type]="Types.seat"
+            [width]="23"
+          ></theater-icon>
+          <span>{{ recuentoOcupadas }}</span>
+        </div>
       </div>
     </div>
   </section>

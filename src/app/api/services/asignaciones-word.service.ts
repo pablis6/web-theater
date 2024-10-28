@@ -128,33 +128,53 @@ export class AsignacionesWordService {
     return entradasParagraph;
   }
 
+  recuentoButacas(array: number[]): string {
+    let result = '';
+    let last = array[0];
+    let start = last;
+    let count = 1;
+
+    for (let i = 1; i < array.length; i++) {
+      if (array[i] - last === 2) {
+        count++;
+        last = array[i];
+      } else {
+        if (start === last) {
+          result += start + ' (' + count + '), ';
+        } else {
+          result += start + '-' + last + ' (' + count + '), ';
+        }
+        start = last = array[i];
+      }
+    }
+    if (start === last) {
+      result += start + ' (' + count + ')';
+    } else {
+      result += start + '-' + last + ' (' + count + ')';
+    }
+    return 'BB ' + result;
+  }
+
   extract(array: number[]): string {
+    let ret = '';
     if (array.length > 0) {
       array.sort((a, b) => a - b);
-      let result = '';
-      let last = array[0];
-      let start = last;
-      let count = 1;
-      for (let i = 1; i < array.length; i++) {
-        if (array[i] - last === 2) {
-          count++;
-          last = array[i];
-        } else {
-          if (start === last) {
-            result += start + ' (' + count + '), ';
-          } else {
-            result += start + '-' + last + ' (' + count + '), ';
-          }
-          start = last = array[i];
-        }
-      }
-      if (start === last) {
-        result += start + ' (' + count + ')';
+      // let result = '';
+      // let last = array[0];
+      // let start = last;
+      // let count = 1;
+
+      const pares = array.filter((num) => num % 2 === 0);
+      const impares = array.filter((num) => num % 2 !== 0);
+
+      if (pares.length === 0 || impares.length === 0) {
+        ret = this.recuentoButacas(array);
       } else {
-        result += start + '-' + last + ' (' + count + ')';
+        //los 2 tienen valor
+        ret =
+          this.recuentoButacas(pares) + ' y ' + this.recuentoButacas(impares);
       }
-      return 'BB ' + result;
     }
-    return '';
+    return ret;
   }
 }
