@@ -42,10 +42,10 @@
       ></theater-icon>
     </div>
     <div
-      class="col-span-2 md:col-span-12 grid md:grid-cols-12 gap-3 gap-x-3"
+      class="col-span-2 md:col-span-12 grid grid-cols-12 gap-3 gap-x-3"
       [ngClass]="filtrosAbiertos ? 'delay-75 mt-3' : 'invisible md:visible'"
     >
-      <div class="col-span-1 md:col-span-2">
+      <div class="col-span-6 md:col-span-2">
         <label for="filtroObra">Obra</label>
         <theater-select
           [selected]="filtroObraSeleccionada?.name"
@@ -71,7 +71,7 @@
           </div>
         </theater-select>
       </div>
-      <div class="col-span-1 md:col-span-2">
+      <div class="col-span-6 md:col-span-2">
         <label for="filtroGrupo">Grupo</label>
         <theater-select
           [selected]="filtroGrupoSeleccionado?.name"
@@ -97,13 +97,13 @@
           </div>
         </theater-select>
       </div>
-      <div class="col-span-1 md:col-span-2">
+      <div class="col-span-6 md:col-span-2">
         <label for="filtroFecha">Fecha desde</label>
         <input
           type="date"
           id="filtroFechaDesde"
           formControlName="filtroFechaDesde"
-          class="border border-cuaternary rounded-lg p-2 lg:h-12 w-full"
+          class="border border-cuaternary rounded-lg p-2 lg:h-12 w-full cursor-pointer"
           [ngClass]="{
             'bg-accentsoft dark:bg-accentsoft bg-opacity-50 dark:bg-opacity-50':
               filtrosForm.value.filtroFechaDesde !== null &&
@@ -115,13 +115,13 @@
           (change)="aplicarFiltros()"
         />
       </div>
-      <div class="col-span-1 md:col-span-2">
+      <div class="col-span-6 md:col-span-2">
         <label for="filtroFecha">Fecha hasta</label>
         <input
           type="date"
           id="filtroFechaHasta"
           formControlName="filtroFechaHasta"
-          class="border border-cuaternary rounded-lg p-2 dark:bg-dark-cuaternary lg:h-12 w-full"
+          class="border border-cuaternary rounded-lg p-2 lg:h-12 w-full cursor-pointer"
           [ngClass]="{
             'bg-accentsoft dark:bg-accentsoft bg-opacity-50 dark:bg-opacity-50':
               filtrosForm.value.filtroFechaHasta !== null &&
@@ -134,7 +134,7 @@
         />
       </div>
 
-      <div class="col-span-2 md:col-span-4 flex justify-end gap-3 items-end">
+      <div class="col-span-12 md:col-span-4 flex justify-end gap-3 items-end">
         <!-- boton borrar -->
         <button
           type="button"
