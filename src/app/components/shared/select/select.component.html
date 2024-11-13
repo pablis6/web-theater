@@ -1,10 +1,11 @@
 <!-- selector -->
 <div class="relative">
   <div
-    class="flex justify-between border border-cuaternary bg-white dark:bg-dark-cuaternary rounded-lg p-2 lg:h-12 cursor-pointer relative"
+    class="flex justify-between border border-cuaternary rounded-lg p-2 lg:h-12 cursor-pointer relative"
     [ngClass]="{
       'bg-accentsoft dark:bg-dark-accentsoft bg-opacity-50 dark:bg-opacity-50':
-        filterMode && selected !== null
+        filterMode && selected !== null,
+      'bg-white dark:bg-dark-cuaternary': !filterMode || selected === null
     }"
     (click)="toggleOpen()"
   >
