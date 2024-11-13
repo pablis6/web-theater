@@ -23,6 +23,7 @@ import { SelectComponent } from '../../shared/select/select.component';
 })
 export class ModalObraComponent implements OnChanges {
   @Input() showModal = false;
+  @Input() error = '';
 
   @Output() save: EventEmitter<{ obra: string }> = new EventEmitter();
   @Output() cancel: EventEmitter<void> = new EventEmitter();

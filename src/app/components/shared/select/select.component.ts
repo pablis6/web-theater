@@ -10,6 +10,7 @@ import { IconComponent, Types } from '../../icons/theater-icons.component';
 })
 export class SelectComponent {
   @Input() selected?: string;
+  @Input() filterMode?: boolean = false;
 
   public readonly Types = Types;
 

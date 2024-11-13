@@ -1,5 +1,5 @@
 <div
-  class="fixed inset-0 z-10 flex items-center justify-center bg-black bg-opacity-60 text-lg"
+  class="fixed inset-0 z-10 flex items-center justify-center bg-black bg-opacity-60"
   *ngIf="showModal"
 >
   <div
@@ -21,6 +21,7 @@
           />
         </div>
       </div>
+      <span *ngIf="error !== null" class="text-red-500">{{ error }}</span>
 
       <div class="flex justify-between">
         <button
