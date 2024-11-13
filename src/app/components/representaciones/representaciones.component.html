@@ -109,7 +109,7 @@
               filtrosForm.value.filtroFechaDesde !== null &&
               filtrosForm.value.filtroFechaDesde !== '',
             'bg-white dark:bg-dark-cuaternary':
-              filtrosForm.value.filtroFechaDesde === null &&
+              filtrosForm.value.filtroFechaDesde === null ||
               filtrosForm.value.filtroFechaDesde === ''
           }"
           (change)="aplicarFiltros()"
