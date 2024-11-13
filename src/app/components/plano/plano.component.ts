@@ -166,9 +166,18 @@ export class PlanoComponent implements OnInit {
     this.rotasSeleccionadas = 0;
     this.planosService
       .updateSeat(this.representacionId, this.plano?.butacas || [])
-      .subscribe((planoActualizado: Plano) => {
-        this.plano = planoActualizado;
-        this.recuentoButacas(this.plano?.butacas || []);
+      .subscribe({
+        next: (planoActualizado: Plano) => {
+          this.plano = planoActualizado;
+          this.recuentoButacas(this.plano?.butacas || []);
+        },
+        error: ({ status, error }) => {
+          if (status === 400) {
+            alert(error.message);
+          } else {
+            alert('Error desconocido');
+          }
+        },
       });
   }
 

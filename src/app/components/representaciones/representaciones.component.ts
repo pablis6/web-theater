@@ -40,6 +40,7 @@ export class RepresentacionesComponent {
   public showModalBorrar = false;
   public obras: Obra[] = [];
   public grupos: Grupo[] = [];
+  public obraError = '';
   public representacionSeleccionada: Representacion | null = null;
   public isLoading = false;
 
@@ -86,11 +87,20 @@ export class RepresentacionesComponent {
   editar(repre: Representacion) {
     this.representacionesService
       .updateRepresentacion(repre.id, repre)
-      .subscribe((representacionUpdate: Representacion) => {
+      .subscribe({
+        next: (representacionUpdate: Representacion) => {
         const index = this.representaciones.findIndex(
           (representacion) => representacion.id === repre.id
         );
         this.representaciones[index] = representacionUpdate;
+        },
+        error: ({ status, error }) => {
+          if (status === 400) {
+            alert(error.message);
+          } else {
+            alert('Error desconocido');
+          }
+        },
       });
   }
 
@@ -111,12 +121,19 @@ export class RepresentacionesComponent {
   deleteRepresentacion(repre: Representacion) {
     this.showModalBorrar = false;
     this.representacionSeleccionada = null;
-    this.representacionesService
-      .deleteRepresentacion(repre.id)
-      .subscribe(() => {
+    this.representacionesService.deleteRepresentacion(repre.id).subscribe({
+      next: () => {
         this.representaciones = this.representaciones.filter(
           (representacion) => representacion.id !== repre.id
         );
+      },
+      error: ({ status, error }) => {
+        if (status === 400) {
+          alert(error.message);
+        } else {
+          alert('Error desconocido');
+        }
+      },
       });
   }
 
@@ -124,19 +141,37 @@ export class RepresentacionesComponent {
     if (updateMode) {
       this.representacionesService
         .updateRepresentacion(representacion.id, representacion)
-        .subscribe((representacionActualizada) => {
+        .subscribe({
+          next: (representacionActualizada) => {
           let index = this.representaciones.findIndex(
             (repre) => repre.id === representacionActualizada.id
           );
           this.representaciones[index] = representacionActualizada;
           this.showModalRepresentacion = false;
+          },
+          error: ({ status, error }) => {
+            if (status === 400) {
+              alert(error.message);
+            } else {
+              alert('Error desconocido');
+            }
+          },
         });
     } else {
       this.representacionesService
         .createRepresentacion(representacion)
-        .subscribe((representacionCreada) => {
+        .subscribe({
+          next: (representacionCreada) => {
           this.representaciones.push(representacionCreada);
           this.showModalRepresentacion = false;
+          },
+          error: ({ status, error }) => {
+            if (status === 400) {
+              alert(error.message);
+            } else {
+              alert('Error desconocido');
+            }
+          },
         });
     }
   }
@@ -151,11 +186,18 @@ export class RepresentacionesComponent {
   }
 
   saveObra({ obra }: { obra: string }) {
-    this.obrasService
-      .createObra({ name: obra } as Obra)
-      .subscribe((obraCreada) => {
+    this.obrasService.createObra({ name: obra } as Obra).subscribe({
+      next: (obraCreada) => {
         this.obras.push(obraCreada);
         this.showModalObra = false;
+      },
+      error: ({ status, error }) => {
+        if (status === 400) {
+          this.obraError = error.message;
+        } else {
+          alert('Error desconocido');
+        }
+      },
       });
   }
 
