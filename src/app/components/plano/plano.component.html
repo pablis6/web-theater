@@ -1,8 +1,12 @@
 <article>
   <div class="m-3 text-lg font-bold">
     <a class="text-accent underline" href="representaciones">Inicio</a>
-    <span>
+    <span class="hidden md:inline">
       > {{ representacion?.fecha | date : "EEEE, dd MMMM yyy" }} -
+      {{ representacion?.sesion }}</span
+    >
+    <span class="inline md:hidden">
+      > {{ representacion?.fecha | date : "EEE, dd MMM yyy" }} -
       {{ representacion?.sesion }}</span
     >
   </div>
