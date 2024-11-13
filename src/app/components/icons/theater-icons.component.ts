@@ -13,6 +13,7 @@ export enum Types {
   check = 'check',
   theater = 'theater',
   seat = 'seat',
+  doubleArrow = 'doubleArrow',
 }
 
 @Component({
