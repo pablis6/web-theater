@@ -76,6 +76,9 @@ export class PlanoComponent implements OnInit {
     this.socket.on('butacas', (plano: Plano) => {
       this.plano = plano;
       this.recuentoButacas(this.plano?.butacas || []);
+      this.seleccionadas = 0;
+      this.ocupadasSeleccionadas = 0;
+      this.rotasSeleccionadas = 0;
     });
     this.socket.on('connect', () => {
       this.socket.emit('join', this.representacionId);
