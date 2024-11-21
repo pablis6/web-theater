@@ -73,10 +73,12 @@ export class PlanoComponent implements OnInit {
         this.recuentoButacas(this.plano?.butacas || []);
       });
     });
-    this.socket.emit('join', this.representacionId);
     this.socket.on('butacas', (plano: Plano) => {
       this.plano = plano;
       this.recuentoButacas(this.plano?.butacas || []);
+    });
+    this.socket.on('connect', () => {
+      this.socket.emit('join', this.representacionId);
     });
   }
 
