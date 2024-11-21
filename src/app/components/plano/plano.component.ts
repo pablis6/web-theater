@@ -15,6 +15,8 @@ import { Butaca, Zona, Zona_entresuelo, Zona_patio } from '@api/types/butacas';
 import { Plano } from '@api/types/plano';
 import { Representacion } from '@api/types/representacion';
 import { combineLatest } from 'rxjs';
+import { io } from 'socket.io-client';
+import { environment } from '../../../environments/environment';
 import { IconComponent, Types } from '../icons/theater-icons.component';
 
 export interface PlanoButacasContext {
@@ -28,6 +30,7 @@ export interface PlanoButacasContext {
   templateUrl: './plano.component.html',
 })
 export class PlanoComponent implements OnInit {
+  private socket = io(environment.api);
   public plano: Plano | null = null;
   public Types = Types;
   representacionId: string = '';
@@ -69,6 +72,11 @@ export class PlanoComponent implements OnInit {
         // Recuento de butacas ocupadas y libres
         this.recuentoButacas(this.plano?.butacas || []);
       });
+    });
+    this.socket.emit('join', this.representacionId);
+    this.socket.on('butacas', (plano: Plano) => {
+      this.plano = plano;
+      this.recuentoButacas(this.plano?.butacas || []);
     });
   }
 
@@ -164,21 +172,23 @@ export class PlanoComponent implements OnInit {
     this.seleccionadas = 0;
     this.ocupadasSeleccionadas = 0;
     this.rotasSeleccionadas = 0;
-    this.planosService
-      .updateSeat(this.representacionId, this.plano?.butacas || [])
-      .subscribe({
-        next: (planoActualizado: Plano) => {
-          this.plano = planoActualizado;
-          this.recuentoButacas(this.plano?.butacas || []);
-        },
-        error: ({ status, error }) => {
-          if (status === 400) {
-            alert(error.message);
-          } else {
-            alert('Error desconocido');
-          }
-        },
-      });
+    // this.planosService
+    //   .updateSeat(this.representacionId, this.plano?.butacas || [])
+    //   .subscribe({
+    //     next: (planoActualizado: Plano) => {
+    //       this.plano = planoActualizado;
+    //       this.recuentoButacas(this.plano?.butacas || []);
+    //     },
+    //     error: ({ status, error }) => {
+    //       if (status === 400) {
+    //         alert(error.message);
+    //       } else {
+    //         alert('Error desconocido');
+    //       }
+    //     },
+    //   });
+
+    this.socket.emit('butacas', this.plano);
   }
 
   private recuentoButacas(butacas: Butaca[][]) {
