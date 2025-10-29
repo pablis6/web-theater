@@ -268,6 +268,9 @@ export class RepresentacionesComponent {
         .subscribe({
           next: (representacionCreada) => {
             this.representaciones.push(representacionCreada);
+            this.representaciones.sort((a, b) => {
+              return new Date(b.fecha).getTime() - new Date(a.fecha).getTime();
+            });
             this.showModalRepresentacion = false;
           },
           error: ({ status, error }) => {
